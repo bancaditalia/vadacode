@@ -19,18 +19,18 @@ jobs:
       - name: Get latest successful Build Vadacode run
         id: get_run
         run: |
-          # List recent runs of the "Build Vadacode" workflow on master
+          # List recent runs of the "Build Vadacode" workflow on main
           RUN_ID=$(
             gh run list \
               --workflow "Build Vadacode" \
-              --branch master \
+              --branch main \
               --limit 50 \
               --json databaseId,conclusion,createdAt \
               --jq 'map(select(.conclusion=="success")) | sort_by(.createdAt) | reverse | .[0].databaseId'
           )
 
           if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
-            echo "No successful Build Vadacode run found on branch 'master'"
+            echo "No successful Build Vadacode run found on branch 'main'"
             exit 1
           fi
 
@@ -82,7 +82,7 @@ jobs:
   release:
     # Only run after successful build on main
     needs: test-vsix
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
@@ -93,18 +93,18 @@ jobs:
       - name: Get latest successful Build Vadacode run
         id: get_run
         run: |
-          # List recent runs of the "Build Vadacode" workflow on master
+          # List recent runs of the "Build Vadacode" workflow on main
           RUN_ID=$(
             gh run list \
               --workflow "Build Vadacode" \
-              --branch master \
+              --branch main \
               --limit 50 \
               --json databaseId,conclusion,createdAt \
               --jq 'map(select(.conclusion=="success")) | sort_by(.createdAt) | reverse | .[0].databaseId'
           )
 
           if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
-            echo "No successful Build Vadacode run found on branch 'master'"
+            echo "No successful Build Vadacode run found on branch 'main'"
             exit 1
           fi
 

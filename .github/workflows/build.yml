@@ -1,13 +1,13 @@
 name: Build Vadacode
 
-# Run the workflow on pushes and pull requests to master branch
+# Run the workflow on pushes and pull requests to main branch
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   build-grammar:
@@ -143,9 +143,9 @@ jobs:
         run: xvfb-run -a npm run smoke-tests
 
   draft-release:
-    # Only run after successful build on master
+    # Only run after successful build on main
     needs: test-vsix
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
