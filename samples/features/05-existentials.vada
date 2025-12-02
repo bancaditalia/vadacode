@@ -1,0 +1,55 @@
+% Existentials
+
+% Existential quantifiers are an extension of Datalog with the power 
+% to generate unnamed individuals in the reasoning process. 
+% Nevertheless, reasoning with existentials is a complex task, since
+% Datalog is undecidable in the presence of existential quantification
+% unless some restrictions are applied.
+% For more information: https://www.vldb.org/pvldb/vol18/p5411-gentili.pdf
+
+% A nice example of existential quantificiation comes from 
+% "Magic-Sets for Datalog with Existential Quantifiers":
+% "This program describes a funny scenario where an escaping, yet fast animal X may
+% induce many other animals to be afraid."
+% https://www.mat.unical.it/datalog-exists/pub/12dl2.pdf
+
+% This is our picture:
+escapes("gazelle").
+fast("gazelle").
+prey("antelope").
+strongerThan("lion", "antelope").
+pursues("lion", "gazelle").
+
+% X escapes, so there must be an animal Z pursuing it.
+pursues(Z,X) :- escapes(X).
+% If Y is pursuing X and X is fast, hunger must be the motivation.
+hungry(Y) :- pursues(Y,X), fast(X).
+% If X pursues W, it can pursue another prey Y.
+pursues(X,Y) :- pursues(X,W), prey(Y).
+% If Y pursues X and it's hungry and stronger than X, X should be afraid.
+afraid(X) :- pursues(Y,X), hungry(Y), strongerThan(Y,X).
+
+% TUTORIAL: Notice the difference in color between X and Z in the first rule.
+%       X appears both in the head and the body, so we say it's universally quantified.
+%       Z appears in the head but not in the body. It must exist but we don't know it.
+%       So we say that Z is existentially quantified: we are creating it, and we are
+%       creating it with no value. 
+%       As such, we say that Z holds a marked null.
+
+% NOTE: Semantic highlighting depends on the theme you are using in Visual Studio Code.
+%       Try different themes if you don't see the difference!
+
+% TUTORIAL: Vadacode supports hover information, so just stay with the mouse on an atom to know more.
+%       * The Z at line 24 is an existential variable.
+%       * The Y at line 26 can contain nulls, and so it's analyzed by Vadacode and reported
+%         as harmful and dangerous.
+%       * Lines 28 and 30 use the variable in rules even if they contain nulls, so we can reason
+%         on existentials.
+%       * Line 30 does not propagate a null in the head, so we are safe to use nulls in the body.
+%       Vadacode checks everything automatically!
+
+@output("afraid").
+
+% TUTORIAL: Run the program (answer is antelope).
+%       From the point of view of the antelope, being afraid is the logical
+%       consequence that follows seeing a lion pursuing a gazelle!

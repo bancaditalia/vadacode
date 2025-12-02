@@ -1,0 +1,485 @@
+{
+  "name": "vadacode",
+  "description": "Datalog+/- language VSCode extension",
+  "author": "Banca d'Italia",
+  "license": "SSPL-1.0",
+  "private": true,
+  "publisher": "bancaditalia",
+  "version": "1.8.4",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bancaditalia/vadacode"
+  },
+  "categories": [],
+  "keywords": [],
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "icon": "./icons/vadacode.png",
+  "main": "./client/out/extension",
+  "configurationDefaults": {
+    "data": {
+      "editor.semanticHighlighting.enabled": true
+    }
+  },
+  "activationEvents": [
+    "onNotebook:datalogpm-notebook"
+  ],
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "vadacode.vadacoder",
+        "fullName": "Vadacoder",
+        "name": "vadacoder",
+        "description": "Your knowledgeable Datalog± assistant.",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "manual",
+            "description": "Request information about Datalog± language."
+          },
+          {
+            "name": "write",
+            "description": "Write Datalog± code."
+          }
+        ]
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceExtname == .csv",
+          "command": "vadacode.addCSVToInput",
+          "group": "navigation"
+        },
+        {
+          "when": "resourceExtname == .parquet",
+          "command": "vadacode.addParquetToInput",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "vadacode.evaluateProgram",
+          "when": "resourceLangId == 'datalogpm'",
+          "group": "navigation"
+        }
+      ]
+    },
+    "walkthroughs": [
+      {
+        "id": "datalogpmWelcome",
+        "title": "Get started with Datalog± Development",
+        "description": "Your first steps to set up a Datalog± project with all the powerful tools and features that the Vadacode extension has to offer!",
+        "steps": [
+          {
+            "id": "vadacode.datalogpm.createDatalogpmFolder",
+            "title": "Open a Datalog± project folder",
+            "description": "[Open](command:workbench.action.files.openFolder) or create a project folder.\n[Open Project Folder](command:workbench.action.files.openFolder)",
+            "media": {
+              "svg": "resources/walkthrough/datalogpm-open-folder.svg",
+              "altText": ""
+            },
+            "when": "workspaceFolderCount = 0"
+          },
+          {
+            "id": "vadacode.datalogpm.createDatalogpmFile",
+            "title": "Create a Datalog± file",
+            "description": "[Open](command:toSide:workbench.action.files.openFile) or [create](command:toSide:workbench.action.files.newUntitledFile?%7B%22languageId%22%3A%22datalogpm%22%7D) a Datalog± file - make sure to save it as \".vada\".\n[Create Datalog± File](command:toSide:workbench.action.files.newUntitledFile?%7B%22languageId%22%3A%22datalogpm%22%7D)",
+            "media": {
+              "svg": "resources/walkthrough/datalogpm-open-folder.svg",
+              "altText": ""
+            }
+          },
+          {
+            "id": "vadacode.datalogpm.focusResults",
+            "title": "Open Datalog± view",
+            "description": "Click [here](command:vadacode-task-results.focus) to open the **Datalog± view**, which receives from Datalog± the evalation results. This step will complete once the view has been opened.",
+            "media": {
+              "image": "resources/walkthrough/datalogpm-view.svg",
+              "altText": ""
+            },
+            "completionEvents": [
+              "onView:vadacode-task-results"
+            ]
+          },
+          {
+            "id": "vadacode.datalogpm.evaluate",
+            "title": "Run your Datalog± program",
+            "description": "Open your Datalog± file and run the **Vadacode: Evaluate program** command.\nThe same command can be triggered using shortcut Ctrl+Shift+Enter.",
+            "media": {
+              "svg": "resources/walkthrough/datalogpm-evaluate.svg",
+              "altText": ""
+            }
+          }
+        ]
+      },
+      {
+        "id": "datalogpmNotebookWelcome",
+        "title": "Get Started with Datalog± Notebooks",
+        "description": "Your first steps to getting started with a Data Science project with Datalog±!",
+        "steps": [
+          {
+            "id": "datalogpmNotebook.checkExt",
+            "title": "You already have the notebook extension installed!",
+            "description": "If you have installed the [Vadacode extension](command:workbench.extensions.search?\"bancaditalia.vadacode\") you already have everything needed to take full advantage of Datalog± notebooks in VS Code!",
+            "media": {
+              "svg": "resources/walkthrough/data-science.svg",
+              "altText": ""
+            }
+          },
+          {
+            "id": "vadacode.createNewNotebook",
+            "title": "Create or open a Jupyter Notebook",
+            "description": "Right click in the file explorer and create a new file with a `.vadanb` extension. Or, open the [Command Palette](command:workbench.action.showCommands) and run the command ``Vadacode: Create Notebook``.\n[Create new Datalog± Notebook](command:toSide:vadacode.createNewNotebook)\n If you have an existing project, you can also [open a folder](command:workbench.action.files.openFolder) and/or clone a project from GitHub: [clone a Git repository](command:git.clone).",
+            "media": {
+              "svg": "resources/walkthrough/create-notebook.svg",
+              "altText": ""
+            },
+            "completionEvents": [
+              "onCommand:vadacode.createNewNotebook",
+              "onCommand:workbench.action.files.openFolder",
+              "onCommand:workbench.action.files.openFileFolder"
+            ]
+          },
+          {
+            "id": "datalogpmNotebook.runNotebook",
+            "title": "Run notebook cells",
+            "description": "In a Datalog± notebook you can run cells using the play button on the side of each cell, or the Run All/Run Above/Run Below toolbar buttons.",
+            "media": {
+              "svg": "resources/walkthrough/notebook-cell.svg",
+              "altText": ""
+            }
+          }
+        ]
+      }
+    ],
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "vadacode-task",
+          "title": "Datalog±",
+          "icon": "icons/vada-dark.svg"
+        }
+      ]
+    },
+    "views": {
+      "vadacode-task": [
+        {
+          "id": "vadacode-task-results",
+          "type": "webview",
+          "name": "Results",
+          "icon": "icons/vada-dark.svg"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "id": "datalogpm",
+        "extensions": [
+          ".vada",
+          ".vadanb"
+        ],
+        "aliases": [
+          "Datalog±",
+          "datalogpm"
+        ],
+        "configuration": "./datalogpm-language-configuration.json",
+        "icon": {
+          "light": "./icons/vada-light.svg",
+          "dark": "./icons/vada-dark.svg"
+        }
+      },
+      {
+        "id": "ecslog",
+        "mimetypes": [
+          "text/x-ecslog"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "datalogpm",
+        "scopeName": "source.datalogpm",
+        "path": "./syntaxes/datalogpm.tmGrammar.json"
+      },
+      {
+        "path": "./syntaxes/datalogpm-comment-injection.tmGrammar.json",
+        "scopeName": "comment.injection",
+        "injectTo": [
+          "source.datalogpm"
+        ]
+      },
+      {
+        "path": "./syntaxes/vadoc-injection.tmGrammar.json",
+        "scopeName": "comment-block-documentation.injection",
+        "injectTo": [
+          "source.datalogpm"
+        ]
+      },
+      {
+        "language": "ecslog",
+        "path": "./syntaxes/ecslog.tmGrammar.json",
+        "scopeName": "source.ecslog"
+      }
+    ],
+    "commands": [
+      {
+        "command": "vadacode.addCSVToInput",
+        "title": "Add CSV to @input",
+        "category": "Vadacode"
+      },
+      {
+        "command": "vadacode.addParquetToInput",
+        "title": "Add Parquet to @input",
+        "category": "Vadacode"
+      },
+      {
+        "command": "vadacode.addCopilotInstructions",
+        "title": "Add Copilot Instructions & Prompts",
+        "category": "Vadacode"
+      },
+      {
+        "command": "vadacode.createNewNotebook",
+        "title": "Create Notebook",
+        "icon": "$(file-add)",
+        "category": "Vadacode"
+      },
+      {
+        "command": "vadacode.evaluateProgram",
+        "title": "Vadacode: Evaluate program",
+        "when": "resourceLangId == 'datalogpm'",
+        "icon": "$(play)",
+        "category": "Vadacode"
+      },
+      {
+        "command": "vadacode.watchLogStart",
+        "title": "Vadacode: Watch log...",
+        "category": "Vadacode"
+      },
+      {
+        "command": "vadacode.watchLogStop",
+        "title": "Vadacode: Stop watching log...",
+        "category": "Vadacode"
+      }
+    ],
+    "keybindings": [
+      {
+        "key": "ctrl+shift+enter",
+        "command": "vadacode.evaluateProgram",
+        "when": "resourceLangId == 'datalogpm'"
+      }
+    ],
+    "notebooks": [
+      {
+        "id": "datalogpm-notebook",
+        "type": "datalogpm-notebook",
+        "displayName": "Datalog± Notebook",
+        "selector": [
+          {
+            "filenamePattern": "*.vadanb"
+          }
+        ]
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Vadacode",
+      "properties": {
+        "vadacode.reasonerEndpoint": {
+          "scope": "resource",
+          "type": "string",
+          "default": "http://127.0.0.1:8080",
+          "description": "Reasoner HTTP endpoint in `protocol://hostname:port` format (e.g. `http://datalogpm:8080`)."
+        },
+        "vadacode.logs.application.filename": {
+          "type": "string",
+          "default": "",
+          "description": "Reasoner log file path"
+        },
+        "vadacode.logs.application.interval": {
+          "type": "number",
+          "default": 0,
+          "description": "Reasoner log update interval in seconds. Set to 0 to disable forced updates. Note that the log file is automatically updated when it changes, so this setting is only useful if you want to force updates at a specific interval."
+        },
+        "vadacode.autoSwitch": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically switch to the \"Datalog±\" tab when a program is evaluated."
+        }
+      }
+    },
+    "notebookRenderer": [
+      {
+        "id": "datalogpm-results-table-renderer",
+        "displayName": "Datalog± results table renderer",
+        "entrypoint": "./datalogpm-results-table-renderer/out/index.js",
+        "mimeTypes": [
+          "x-application/datalogpm-results-table",
+          "x-application/datalogpm-results-error"
+        ]
+      }
+    ],
+    "configurationDefaults": {
+      "editor.tokenColorCustomizations": {
+        "textMateRules": [
+          {
+            "scope": "keyword.bug",
+            "settings": {
+              "foreground": "#e74c3c"
+            }
+          },
+          {
+            "scope": "keyword.hack",
+            "settings": {
+              "foreground": "#c0392b"
+            }
+          },
+          {
+            "scope": "keyword.fixme",
+            "settings": {
+              "foreground": "#e67e22"
+            }
+          },
+          {
+            "scope": "keyword.todo",
+            "settings": {
+              "foreground": "#3498db"
+            }
+          },
+          {
+            "scope": "keyword.note",
+            "settings": {
+              "foreground": "#27ae60"
+            }
+          },
+          {
+            "scope": "keyword.comment",
+            "settings": {
+              "foreground": "#27ae60"
+            }
+          },
+          {
+            "scope": "constant.character.error.ecslog",
+            "settings": {
+              "foreground": "#c0392b"
+            }
+          },
+          {
+            "scope": "constant.character.warning.ecslog",
+            "settings": {
+              "foreground": "#e67e22"
+            }
+          },
+          {
+            "scope": "constant.character.info.ecslog",
+            "settings": {
+              "foreground": "#3498db"
+            }
+          },
+          {
+            "scope": "constant.character.debug.ecslog",
+            "settings": {
+              "foreground": "#848484"
+            }
+          },
+          {
+            "scope": "variable.key.ecslog",
+            "settings": {
+              "foreground": "#731b1b"
+            }
+          },
+          {
+            "scope": "string.value.ecslog",
+            "settings": {
+              "foreground": "#2da67c"
+            }
+          }
+        ]
+      },
+      "editor.semanticTokenColorCustomizations": {
+        "rules": {
+          "variable.deprecated": {
+            "strikethrough": true
+          },
+          "function.async": {
+            "italic": true
+          },
+          "string.modification": {
+            "bold": true
+          },
+          "*.static": {
+            "bold": true
+          }
+        },
+        "[Default Dark+]": {
+          "rules": {
+            "variable.readonly": {
+              "foreground": "#f198f1"
+            }
+          }
+        },
+        "[Default Dark Modern]": {
+          "rules": {
+            "variable.readonly": {
+              "foreground": "#f198f1"
+            }
+          }
+        },
+        "[Default Light+]": {
+          "rules": {
+            "variable.readonly": {
+              "foreground": "#9f499f"
+            }
+          }
+        },
+        "[Default Light Modern]": {
+          "rules": {
+            "variable.readonly": {
+              "foreground": "#9f499f"
+            }
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
+    "postinstall": "cd client && npm install && cd ../server && npm install && cd ../datalogpm-parser && npm install && cd ../datalogpm-results-table-renderer && npm install && cd ../vadacode-results-webview && npm install && cd ..",
+    "server-unit-test": "npm run build-datalogpm-parser && cd server && npm run compile && npm run test",
+    "e2e": "cd client && npm run compile && npm run build && cd .. && sh ./scripts/e2e.sh",
+    "test": "npm run server-unit-test && npm run e2e && npm run smoke",
+    "clean": "rimraf out && rimraf client/out && rimraf server/out",
+    "cleaninstall": "rimraf client/node_modules && rimraf server/node_modules",
+    "build-datalogpm-grammar": "cd datalogpm-parser && npm run antlr4 && cd ../",
+    "build-datalogpm-parser": "cd datalogpm-parser && npm run build && cd ../",
+    "build-vadacode-results-webview": "cd vadacode-results-webview && npm run build && cd ../",
+    "build-datalogpm-results-table-renderer": "cd datalogpm-results-table-renderer && npm run build && cd ../",
+    "build-client": "cd client && npm run build && cd ..",
+    "build-server": "cd server && npm run build && cd ..",
+    "build": "npm run build-datalogpm-parser && npm run build-datalogpm-results-table-renderer && npm run build-vadacode-results-webview && npm run build-client && npm run build-server",
+    "ui-get": "extest get-vscode  --code_version max --storage .test-storage",
+    "ui-install": "extest install-vsix --vsix_file build/vadacode-v$(cat version).vsix --extensions_dir .test-extensions --storage .test-storage",
+    "ui-chromedriver": "extest get-chromedriver  --code_version max --storage .test-storage",
+    "ui-test": "extest run-tests --mocha_config mocharc.js --code_version max --code_settings scripts/settings.json --extensions_dir .test-extensions --storage .test-storage",
+    "smoke-tests": "npm run ui-test -- './out/ui-test/text-editor.test.js' && npm run ui-test -- './out/ui-test/extensions-view.test.js' && npm run ui-test -- './out/ui-test/diagnostics.test.js'",
+    "smoke": "npm run clean && npm run package && npm run compile && npm run ui-get && npm run ui-install && npm run ui-chromedriver && npm run smoke-tests",
+    "package": "npm run clean && npm run build && mkdir -p build && vsce package -o build/vadacode-v$(cat version).vsix && ./scripts/check-size.sh build/vadacode-v$(cat version).vsix"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.1",
+    "@types/mocha": "^9.1.0",
+    "@types/node": "^22.8.7",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^2.32.0",
+    "concurrently": "^7.6.0",
+    "eslint": "^8.35.0",
+    "mocha": "^11.7.1",
+    "typescript": "^5.6.3",
+    "vscode-extension-tester": "^8.8.1"
+  }
+}

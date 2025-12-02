@@ -1,0 +1,18 @@
+# Signatures
+
+Vadacode supports the representation of atoms using https://en.wikipedia.org/wiki/Type_signature[signatures], a concept which is familiar to those who use imperative languages that defines the inputs and outputs of a function, subroutine or method.
+
+In Datalog+/- language, a signature is the schema of an atom, that is the ordered list of its terms along with their types. These signatures are made available in Visual Studio Code to support some of its code navigation features.
+
+NOTE: Signatures are derived from atom definitions. Read more about xref:definitions.adoc[atom definitions].
+
+## Hovers
+
+The first use of signatures is with the Hover feature, which shows information about the atom that's below the mouse cursor.
+
+.Atom signature shown in hover widget; signature has been inferred by usage.
+image::signature-hover.png[]
+
+You can really improve signatures using xref:vadoc.adoc[Vadoc] documentation comments.
+
+image::signature-vadoc.png[]

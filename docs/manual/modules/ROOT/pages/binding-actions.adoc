@@ -1,0 +1,30 @@
+# Binding actions
+
+Datalog+/- language supports data source binding through the https://www.vadalog.org/vadalog-handbook/latest/annotations-bindings.html[`@bind`] annotation. Vadacode improves user experience with binding with a set of specific actions. 
+
+## `@input` binding actions
+
+When you declare an `@input` binding, you get two handy inlay buttons: **Test binding** and **Infer schema...**.
+
+.Input binding actions
+image::binding-actions.png[]
+
+### Action: Test binding
+
+This action allows you to test the binding by executing a stub Datalog+/- program that the binding runs without any errors. It is useful for verifying that the binding is correctly set up and that the data can be retrieved as expected; in case of errors, the action will show an error message with details about the issue, coming directly from the reasoner.
+
+image::binding-test.png[]
+
+### Action: Infer schema...
+
+With Vadacode you can even infer the schema of the data source you are binding to.
+
+Under the hood, this action executes a stub Datalog+/- program that, thanks to a copy rule, inputs facts from the data source and outputs them for being read by Vadacode. The schema is then inferred from received data, and Vadacode enriches the `@input` binding with `@mapping` statements and the input predicate documentation using xref:vadoc.adoc[] format.
+
+NOTE: This feature requires the external reasoner.
+
+image::binding-inference.png[width=80%]
+
+The user is requested for the number of rows to read from the data source to infer the schema.
+
+CAUTION: Since the `@bind` annotation does not specify the breadth of the data to be read, the user is requested for the number of columns to infer the schema for; if the specified number of columns is greater than the actual number of columns in the data source, the inference will fail.

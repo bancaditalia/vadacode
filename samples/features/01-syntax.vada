@@ -1,0 +1,48 @@
+% Welcome to the Datalog+/- syntax demo in Vadacode!
+
+% 0. Hi, I am a comment
+
+% 1. Programs (ontologies)
+
+% A program is made by facts, ...
+sides("square", 4).
+sides("rhombus", 4).
+sides("triangle", 3).
+% rules, ...
+trapezoid(S) :- sides(S, N), N=4.
+% and annotations, ...
+@output("trapezoid").
+% and the order does not matter
+sides("pentagon", 5).
+
+% TUTORIAL: Vadacode has semantic highlight, look at that bold atoms!
+
+% 2. Anatomy of a rule
+
+% Head     :- Body .   (:- is an awkward arrow which represents logic implication)
+%                      (rules end with a .)
+% Head atom
+% |                 Body atom
+% |                 |        Comma (,) is a logic AND
+% |                 |        | Body atom
+% |                 |        | |
+specialist(P, S) :- person(P), knows(P, S).
+% 2a. This is a rule, which generates facts for an atom "specialist", given facts for atoms "person" and "knows".
+% 2b. The body is data that we know already, either in the input datasets or in the head of previous rules.
+% 2c. The head is the result of our implication, so it's new data. 
+
+% TUTORIAL: Vadacode shows a set of diagnostics analyzing the code, 
+%       which shows issues that requires attention. Hover on
+%       person error.
+
+% NOTE: Vadacode does not block execution when there are errors in code.
+%       The reasoner will return its own errors upon execution.
+
+% And we can use it in new rules, like:
+peers(P1, P2) :- specialist(P1, S), specialist(P2, S).
+
+% TUTORIAL: You can find diagnostics in multiple places, but here you can see:
+%       (i)   squiggly lines (yellow for warnings, red for errors)
+%       (ii)  issue message on hover
+%       (iii) Problems tab
+%       (iv)  explorer panel 

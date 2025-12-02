@@ -1,0 +1,20 @@
+{
+  "name": "vadacode-manual",
+  "version": "1.0.0",
+  "description": "Vadacode documentation site",
+  "main": "index.js",
+  "scripts": {
+    "generate": "antora --fetch antora-playbook.yml",
+    "serve": "http-server -o site/ -c-1 ./build/"
+  },
+  "author": "Banca d'Italia",
+  "license": "SSPL-1.0",
+  "devDependencies": {
+    "@antora/cli": "3.1.4",
+    "@antora/site-generator": "3.1.4",
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "@antora/lunr-extension": "^1.0.0-alpha.8"
+  }
+}

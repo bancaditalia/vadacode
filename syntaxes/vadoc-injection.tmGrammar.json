@@ -1,0 +1,35 @@
+{
+  "scopeName": "comment-block-documentation.injection",
+  "injectionSelector": "L:comment.block.documentation",
+  "patterns": [
+    { "include": "#term_definition" },
+    { "include": "#keyword" },
+		{ "include": "#type" }
+  ],
+  "repository": {
+    "keyword": {
+      "match": "@\\w+",
+      "name": "keyword"
+    },
+    "type": {
+      "match": "{\\w+}",
+      "name": "entity.name.type"
+    },
+		"term_definition": {
+			"name": "abstract.definition.fsharp",
+			"begin": "(@\\w+)\\s+{(\\w+)}\\s+(\\w+)",
+			"end": "$",
+			"beginCaptures": {
+					"1": {
+							"name": "keyword.term"
+					},
+					"2": {
+							"name": "entity.name.type"
+					},
+					"3": {
+							"name": "support.function.attribute.fsharp"
+					}
+			}
+		}
+  }
+}

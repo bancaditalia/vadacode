@@ -1,0 +1,3 @@
+% Datalog
+reach(X, Y) :- edge(X, Y).
+reach(X, Y) :- reach(X, Z), reach(Z, Y).

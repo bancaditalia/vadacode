@@ -1,0 +1,44 @@
+{
+  "scopeName": "source.ecslog",
+  "patterns": [
+    {
+      "match": "\\\"log.level\\\":\\s*\\\"ERROR\\\"",
+      "name": "constant.character.error.ecslog"
+    },
+    {
+      "match": "\\\"log.level\\\":\\s*\\\"WARN\\\"",
+      "name": "constant.character.warning.ecslog"
+    },
+    {
+      "match": "\\\"log.level\\\":\\s*\\\"INFO\\\"",
+      "name": "constant.character.info.ecslog"
+    },
+    {
+      "match": "\\\"log.level\\\":\\s*\\\"DEBUG\\\"",
+      "name": "constant.character.debug.ecslog"
+    },
+    {
+      "match": "\\\"(\\\\@?[a-zA-Z0-9._-]+)\\\"\\s*:\\s*",
+      "name": "keyword.key.logjson"
+    },
+    {
+      "match": "\"(.*?)\"",
+      "name": "string.value.logjson"
+    },
+    {
+      "match": "\\b\\d+\\b",
+      "name": "constant.numeric.logjson"
+    },
+    {
+      "match": "\\b(true|false|null)\\b",
+      "name": "constant.language.logjson"
+    },
+    {
+      "match": "\\\"(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z)\\\"",
+      "name": "constant.timestamp.logjson"
+    }
+
+  ],
+  "repository": {},
+  "scope": "source.ecslog"
+}

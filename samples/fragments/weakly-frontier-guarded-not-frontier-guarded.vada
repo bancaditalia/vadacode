@@ -1,0 +1,9 @@
+% Weakly Frontier Guarded
+% (but not Frontier Guarded, as there is no atom containing 
+% X,Y,Z figuring in the head of the rule)
+% i[2] is affected
+% in second rule, x and z are harmless, y is harmful and dangerous
+e("1").
+i1(X,Y,S) :- e(X).
+i2(X,Y,Z) :- i1(X,Y,_), i1(Z,Y,_).
+@output("i2").

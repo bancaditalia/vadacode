@@ -1,0 +1,179 @@
+name: Build Vadacode
+
+# Run the workflow on pushes and pull requests to master branch
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-grammar:
+    runs-on: ubuntu-latest
+
+    # Same image as in GitLab
+    container:
+      image: maven:3.6.3-openjdk-17
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Download ANTLR"
+        working-directory: datalogpm-parser/bin
+        run: ./get-antlr.sh
+
+      - name: "Generate Datalog+/- grammar"
+        working-directory: datalogpm-parser
+        run: ./antlr4-generate.sh
+
+      - name: "Upload grammar artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: datalogpm-grammar
+          path: datalogpm-parser/src/grammar/
+
+  test-extension:
+    runs-on: ubuntu-latest
+    needs:
+      - build-grammar
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download grammar artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: datalogpm-grammar
+          path: datalogpm-parser/src/grammar/
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build everything
+        run: npm run build
+
+      - name: Execute server tests
+        run: npm run server-unit-test
+
+      - name: Execute client tests (e2e)
+        run: xvfb-run -a npm run e2e 
+
+      - name: Compile smoke tests for later
+        run: npm run compile
+
+      - name: Upload Vadacode build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: vadacode-out
+          path: out
+
+  build-extension:
+    runs-on: ubuntu-latest
+    needs:
+      - test-extension
+
+    container:
+      image: node:24.11
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download grammar artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: datalogpm-grammar
+          path: datalogpm-parser/src/grammar/
+
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Generate package
+        run: npm run package
+
+      - name: Upload Vadacode build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: vadacode-build
+          path: build
+
+  test-vsix:
+    runs-on: ubuntu-latest
+    needs:
+      - build-extension
+      - test-extension
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Vadacode build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: vadacode-build
+          path: build
+
+      - name: Download Vadacode test artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: vadacode-out
+          path: out
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Configure environment
+        run: npm run ui-get && npm run ui-install && npm run ui-chromedriver
+
+      - name: Execute client tests (smoke)
+        run: xvfb-run -a npm run smoke-tests
+
+  draft-release:
+    # Only run after successful build on master
+    needs: test-vsix
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Vadacode build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: vadacode-build
+          path: build
+
+      - name: Read version from file
+        id: version
+        run: |
+          VERSION=$(cat version)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create draft GitHub release
+        # https://github.com/softprops/action-gh-release
+        uses: softprops/action-gh-release@v2
+        with:
+          # Draft tag: moves with each CI run for that version
+          tag_name: v${{ env.VERSION }}-draft
+          name: v${{ env.VERSION }} (draft)
+          files: build/*
+          target_commitish: ${{ github.sha }}
+          draft: true
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

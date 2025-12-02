@@ -1,0 +1,53 @@
+% Negation
+
+% Negation is a logic operation that can be used in rules to make deductions
+% out of the absence of a fact instead of its presence.
+% You can write both grounded and stratified negation (see below for details),
+% using a single logic operator `not`.
+
+% We have some people working for a company.
+worksFor("alice", "companyA").
+employeeOf("alice", "companyA").
+worksFor("bob", "companyA").
+worksFor("carl", "companyB").
+worksFor("david", "companyC").
+employeeOf("david", "companyC").
+
+
+% 1. Grounded negation rule
+% Negation is grounded when in front of atoms whose 
+% predicates are extensional. In this case we are saying that who
+% works for a company but is not an employee of the company is an 
+% external contractor.
+contractorFor(P, C) :- worksFor(P, C), not employeeOf(P, C).
+
+@output("contractorFor").
+
+% TUTORIAL: Run and check that Alice is not a contractor.
+
+% 2. Stratified negation example
+% Negation is stratified when in front of atoms whose predicates are
+% intensional and not recursive.
+
+% A company C only uses employees if there are no contractors for C.
+% onlyUsesEmployees(C) :- not contractorFor(_, C).
+
+% TUTORIAL: Look at the error.
+%       Vadacode automatically checks for the correct use of negation.
+
+% Let's use employeeOf to add a non-negated binding.
+% onlyUsesEmployees(C) :- employeeOf(P, C), not contractorFor(_, C).  
+% @output("onlyUsesEmployees").
+
+% TUTORIAL: Try the second formulation. Now the program is correct.
+
+% 3. Negation as failure 
+% Negation as failure is a special constraint that makes the reasoning process to fail 
+% when some conditions at runtime are verified. These constraints are expressed as rules 
+% which have the false symbol #F in the head.
+
+% Fail if there are any contractors.
+% #F :- contractorFor(X, Y).
+
+% TUTORIAL: Vadacode shows reasoning runtime errors as well in the same panel.
+%       Uncomment the negation-as-failure rule and execute the code.

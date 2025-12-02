@@ -1,0 +1,48 @@
+# Definitions
+:experimental:
+
+Developers often need to view the source code definitions for code elements they use in their code. In Vadacode, the **Go To Definition** and **Peek Definition** features let you easily view the definition of a type or member. 
+
+## What is a definition?
+
+Datalog+/- is a declarative language in which **rule order has no meaning** (precedence has no effect when declaring a fact or specifying a rule). Nevertheless, internally the atom metadata are memorized using the first occurrence of the atom in code (so if you use the head `a(X)` and then the head `a(Y)`, atom `a` is assumed to have a single term named `X` because it appeared as such in the first occurrence of `a` as an head).
+
+
+Hence, in Vadacode, definition point for an atom is assigned:
+
+1. If the atom appears in an **`@input` annotation**, then the definition point is that annotation;
+2. If the atom appears in a rule head and has a **Vadoc documentation**, that the definition point is that of the documentation;
+3. Otherwise, the definition point for the atom is assumed to be the **first time** it appears in the head of a rule.
+
+## Go to a definition
+
+When you use the **Go To Definition** feature on an atom, Visual Studio locates the source code for the selected atom. Visual Studio changes the current focus to highlight the relevant entry.
+
+.Go to definition feature
+image::go-to-definition.png[]
+
+
+There are several ways you can access **Go To Definition**:
+
+* Position the cursor inside the symbol name and use the kbd:[F12] function key
+* Right-click the symbol name and select menu:Go To Definition[]
+* Use the kbd:[Ctrl, Click] keyboard/mouse shortcut on the symbol name
+
+## Peek at a definition
+
+The **Peek Definition** feature lets you preview the definition of an atom without changing the focus from your current file in the editor. Visual Studio opens a condensed **Peek** view window for the source file in place with your current file. You can change the size of the **Peek** view window to see more of the source definition:
+
+.Peek definition menu
+image::peek-menu.png[]
+
+.Peek view window within the current view
+image::peek-view.png[]
+
+When you close the **Peek** view window, your current code file remains open in the editor.
+
+There are several ways you can access **Peek Definition**:
+
+* Position the cursor inside the symbol name and select kbd:[Alt,F12] function key
+* Right-click the symbol name and select menu:Peek Definition[]
+* Use the kbd:[Ctrl, Click] keyboard/mouse shortcut on the symbol name
+

@@ -1,0 +1,103 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "compile",
+			"group": "build",
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "never"
+			},
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+    {
+      "label": "Client watch",
+			"type": "shell",
+			"command": "npx rollup -c --bundleConfigAsCjs -w",
+      "isBackground": true,
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+      "options": {
+        "cwd": "${workspaceFolder}/client"
+			},
+			"problemMatcher": [
+				{
+					"owner": "typescript",
+					"fileLocation": [
+						"relative",
+						"${cwd}"
+					],
+					"pattern": [{
+						"regexp": "^\\(!\\) Plugin typescript: @rollup\\/plugin-typescript TS(?<errorCode>\\d+): (?<message>.+)$",
+						"code": 1,
+						"message": 2,
+					}, {
+						"regexp": "(?<file>.*?):\\s*\\((?<line>\\d+):(?<column>\\d+)\\)$",
+						"file": 1,
+						"line": 2,
+						"column": 3
+					}],
+					"background": {
+						"activeOnStart": true,
+						"beginsPattern": {
+							"regexp": "^rollup v\\d+\\.\\d+\\.\\d+$"
+						},
+						"endsPattern": {
+							"regexp": "^\\[[\\d{4}\\-\\d{2}\\-\\d{2} \\d{2}:\\d{2}:\\d{2}]+\\] waiting for changes\\.\\.\\.$"
+						}
+					}
+				}
+			]	
+    },
+    {
+      "label": "Server watch",
+			"type": "shell",
+			"command": "npx rollup -c --bundleConfigAsCjs -w",
+      "isBackground": true,
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+      "options": {
+        "cwd": "${workspaceFolder}/server"
+			},
+			"problemMatcher": [
+				{
+					"owner": "typescript",
+					"fileLocation": [
+						"relative",
+						"${cwd}"
+					],
+					"pattern": [{
+						"regexp": "^\\(!\\) Plugin typescript: @rollup\\/plugin-typescript TS(?<errorCode>\\d+): (?<message>.+)$",
+						"code": 1,
+						"message": 2,
+					}, {
+						"regexp": "(?<file>.*?):\\s*\\((?<line>\\d+):(?<column>\\d+)\\)$",
+						"file": 1,
+						"line": 2,
+						"column": 3
+					}],
+					"background": {
+						"activeOnStart": true,
+						"beginsPattern": {
+							"regexp": "^rollup v\\d+\\.\\d+\\.\\d+$"
+						},
+						"endsPattern": {
+							"regexp": "^\\[[\\d{4}\\-\\d{2}\\-\\d{2} \\d{2}:\\d{2}:\\d{2}]+\\] waiting for changes\\.\\.\\.$"
+						}
+					}
+				}
+			]	
+    },
+    {
+      "label": "Watch",
+      "dependsOn": ["Client watch", "Server watch"]
+    }
+	]
+}

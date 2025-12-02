@@ -1,0 +1,143 @@
+# Vadacode development
+
+NOTE: This page is dedicated to Vadacode extension development, i.e. it's about _how it's done_ instead of _what does it do_. If you are not interested in VSCode internals, just skip this section.
+
+## Debugging Vadacode extension in VSCode
+
+- Run `npm install` in Vadacode root folder. This installs all necessary npm modules in all project folders (client, server, ...).
+- Open VS Code on this folder.
+- Switch to the Run and Debug View in the Sidebar (Ctrl+Shift+D).
+- Select `Launch Client (vadacode)` from the drop down (if it is not already).
+- Press ▷ to run the launch config (F5).
+	- VSCode starts compiling the client and server in watch mode.
+- In the Extension Development Host instance of VSCode, open a document in 'Datalog+/-' language mode.
+  - Type `@` to see an example of an annotation completion.
+  - Enter an incomplete rule such as `ab`. The extension will emit the corresponding diagnostics.
+
+## Top-level npm scripts
+
+**test** — Runs server unit tests, then e2e, and finally smoke tests. This is the high-level test orchestrator used by CI for a full verification run.
+
+[source,bash]
+----
+npm run test
+----
+
+**clean** — Remove built artifacts from the root, client, and server output folders (`rimraf out` etc.). Use this to regain a clean working tree before building or packaging.
+
+[source,bash]
+----
+npm run clean
+----
+
+**build** — Top-level aggregator that builds parser, renderers, webview, client and server in sequence. Use this to perform a full build of every piece before packaging.
+
+[source,bash]
+----
+npm run build
+----
+
+**smoke** — High-level quick check that cleans, packages the extension, compiles, prepares the UI test environment, and runs a small set of UI tests. Good for a final sanity check; it can be slow and requires the packaging toolchain and test dependencies.
+
+[source,bash]
+----
+npm run smoke
+----
+
+**package** — Clean, build everything and create a VSIX using `vsce package`, placing the output in `build/vadacode-v$(cat version).vsix`. Run this to produce a distributable VSCode extension package.
+
+[source,bash]
+----
+npm run package
+----
+
+## Modules
+
+## `datalogpm-parser` module
+
+Datalog+/- parser is an ANTLR4-generated parser which is used for both validating the script and syntax/semantic highlight. It must be built before the extension.
+
+[source,bash]
+----
+$ cd datalogpm-parser
+$ npm install
+$ npm run build
+----
+
+## `datalogpm-results-table-renderer` module
+
+It's a VSCode Notebook renderer used to render output cells. It must be built before the extension.
+
+[source,bash]
+----
+$ cd datalogpm-results-table-renderer
+$ npm install
+$ npm run build
+----
+
+## LSP modules (`client` and `server`)
+Most Datalog+/- language features are implemented using https://microsoft.github.io/language-server-protocol/[Language Server Extension] APIs: the `client` module implements the client-side extension code, while the `server` module implements the language server. Both modules must be built before running or packaging the extension.
+
+[source,bash]
+----
+$ cd client
+$ npm install
+$ npm run build
+----
+
+[source,bash]
+----
+$ cd server
+$ npm install
+$ npm run build
+----
+
+## Changelog
+
+Keep an Unreleased section at the top to track upcoming changes.
+
+This serves two purposes:
+- People can see what changes they might expect in upcoming releases;
+- At release time, you can move the Unreleased section changes into a new release version section.
+
+.Changelog format (basic markdown/asciidoc)
+[source,markdown]
+----
+## [Unreleased]
+
+### Added
+...
+
+### Changed
+...
+
+### Deprecated
+...
+
+### Removed
+...
+
+### Fixed
+...
+
+### Security
+...
+----
+
+## `update_version.sh`
+
+Repository version strings are stored in multiple places (e.g., `package.json` files, `CHANGELOG.md`, etc.). To update all version strings consistently, use the provided `update_version.sh` script, passing the new version as an argument (no leading 'v').
+
+.Update package version strings
+[source,bash]
+----
+$ ./update_version.sh 1.7.3
+----
+
+## Testing
+
+Visual Studio Code supports running and debugging tests for extensions. More information can be found in https://code.visualstudio.com/api/working-with-extensions/testing-extension[Visual Studio Code website]. 
+
+Development test are normally run using Extensionl Development Host launch configurations defined in `./.vscode/launch.json`.
+
+Release tests are run using the `npm test` top-level script.

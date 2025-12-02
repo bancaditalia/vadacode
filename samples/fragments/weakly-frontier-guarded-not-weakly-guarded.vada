@@ -1,0 +1,7 @@
+% Weakly Frontier Guarded
+% (but not Weakly Guarded, as there is no atom containing 
+% Y,K dangerous variables).
+e("1").
+i1(X,Y,S) :- e(X).
+i2(X,Y,K) :- i1(X,Y,_), i1(Z,K,_).
+@output("i2").

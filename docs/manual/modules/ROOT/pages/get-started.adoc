@@ -1,0 +1,39 @@
+# Get started
+
+Vadacode tries to use the original https://code.visualstudio.com/[Visual Studio Code,window=_blank] experience as much as possible; hence, several features are integrated directly in the mainstream VSCode workflow.
+
+This section breaks down the main functionalities which are then detailed in each section of this documentation.
+
+image::getting-started-shot.png[]
+
+## Feature tour
+
+### Icons
+When installing Vadacode, the ``.vada`` and ``.vadanb`` file extensions are registered and managed by it. You can recognize Datalog+/- files respectively by their icon: image:vadacode.png[width=16] for ``.vada`` programs, image:vadacode.png[width=16] for ``.vadanb`` notebooks.
+
+### Semantic highlight
+
+xref:semantic-highlighting.adoc[Semantic Highlighting] enriches the syntax coloring based on symbol information from a language service that has the full understanding of the project.
+
+### Diagnostics and code completion
+Vadacode supports Datalog+/- syntax: this means that syntax errors, language assumptions and usage analysis are integrated in Visual Studio Code xref:diagnostics.adoc[diagnostics]; moreover, annotations can be inserted using automatic xref:code-completion.adoc[code completion], and the signature of annotations is directly available in Visual Studio Code interface.
+
+### Comments and documentation
+
+Vadacode supports xref:comments.adoc[colored comment hints] and atom documentation through xref:vadoc.adoc[Vadoc] comment syntax.
+
+### Definitions and references
+
+In Vadacode you can look up for the xref:definitions.adoc[definitions] and xref:signatures.adoc[signatures] of atoms, which might prove useful in complex programs; you can even look up for references to any atom using the familiar Visual Studio Code interface.
+
+### Renaming
+
+Vadacode supports the xref:rename.adoc[renaming] of atoms.
+
+### Running
+
+Vadacode supports interactive execution of Datalog+/- programs directly inside Visual Studio Code interface. You can xref:execution.adoc[execute] `.vada` scripts or even create cool xref:notebooks.adoc[Datalog+/- notebooks].
+
+### Code actions
+
+Vadacode supports xref:code-actions.adoc[], automatic source code changes specialized to fix some diagnostics.

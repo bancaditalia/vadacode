@@ -1,0 +1,44 @@
+# Datalog+/- extension for Visual Studio Code
+:experimental:
+
+[cols="1",frame=none,grid=none]
+|=== 
+a| image::vada-logo.jpg[Project icon, 150] 
+^| CODE
+|=== 
+
+
+
+A https://code.visualstudio.com/[Visual Studio Code,window=_blank] extension with support for the Datalog+/- language, offering support for https://code.visualstudio.com/docs/editor/intellisense[IntelliSense,window=_blank], debugging, formatting, documenting, code navigation, refactoring, natural language coding, and more!
+
+All code editing features (e.g. diagnostics and fragment detection) are implemented directly in Vadacode and don't require the reasoner.
+
+
+## Quick start
+
+-   **Step 1.** **Install** VSCode;
+-   **Step 2.** In VSCode, go to View > Extensions, click on the three-dots (...) button at the top of the tab and click on the **Install from VSIX...** menu. Select the Vadacode `.vsix` file;
+-   **Step 3.** If xref:walkthroughs.adoc[] don't open automatically, you can give them a look using the **Walkthrough: Open Walkthrough...** command;
+-   **Step 4.** Open or create a Datalog+/- file or notebook and start coding!
+
+## Jupyter Notebook quick start
+
+The Vadacode extension offers support for xref:notebooks.adoc[] to provide you a great Datalog+/- notebook experience directly in VS Code.
+
+Datalog+/- notebooks are part of the Vadacode extension, so if you have Vadacode you are good to go.
+
+Open or create a Datalog+/- Notebook file (``.vadaynb``) and start coding in our Notebook Editor!
+
+## Useful commands
+
+Open the Command Palette (kbd:[⌘, shift, P] on macOS and kbd:[ctrl, shift, P] on Windows/Linux) and type in one of the following commands:
+
+.Commands available in VSCode Command Palette
+[%header,%autowidth,cols="1,1",grid=none,frame=none]
+|===
+>|Command                    |Description
+>|`Vadacode: Execute program`  |Executes a Datalog+/- program and shows its results (requires a reasoner).
+>|`Vadacode: Create notebook`  |Creates an empty notebook to start with.
+|===
+
+To see all available Vadacode commands, open the Command Palette and type `Vadacode`.

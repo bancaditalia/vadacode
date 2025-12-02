@@ -1,0 +1,69 @@
+% Aggregations
+
+% Aggregation operators evaluate a given function over a set of facts.
+% They prove very useful because they allow to compute sums, averages,
+% counts and the like while navigating the graph, even using recursion.
+
+% Here we implement a more realistic control relationship using
+% both recursion and aggregation.
+
+%% Ownership graph data.
+owns("a", "b", 0.7).
+     owns("b", "d", 0.1).
+     owns("b", "c", 0.51).
+          owns("c", "d", 0.44).
+
+% TUTORIAL: If you hover the `owns` atom in Vadacode, you can clearly read
+%       what it represents: the "Ownership graph data.".
+%       You can document atoms using the double-percent comment (%%)
+%       which triggers what we call "Vadoc", that is similar to comment
+%       annotations in languages like Java (Javadoc) or Javascript (Jsdoc).
+
+% NOTE: Vadoc comments exist just in Vadacode; in Datalog+/- they are treated
+%       as plain comments and, as such, ignored.
+
+%% Holds the `percentage` of controlled shares that an `owner` company 
+%% **directly and indirectly** holds over a company `owned` by the means
+%% of an intermediate company `controlled`.
+%% @term {string} Owner Id of owner entity (the entity holding shares).
+%% @term {string} Controlled Id of entity controlled by the owner.
+%% @term {string} Owned Id of owned entity (the entity whose shares are held).
+%% @term {number} Percentage Percentage of shares owned by `Controlled`.
+controlled_shares(X,Y,Y,P) :- owns(X,Y,P).
+controlled_shares(X,Z,Y,P) :- control(X,Z, _), owns(Z,Y,P).
+
+% TUTORIAL: Vadoc supports the "tags" which may be used to better describe your
+%       program. Here we use the @term tag which has the purpose of
+%       documenting the terms of an atom.
+%       You can even use markdown for styling the text!
+%       Hover on controlled_shares (any instance of it) and check how the
+%       atom signature is well documented.
+
+% NOTE: Remember, Vadoc has no effect in Datalog+/-, nor it has the definition
+%       of @term variable types!
+
+% Aggregating controlled shares and computing controls.
+% Here we use `msum` which is monotonic increasing summation, which aggregates
+% all percentages held by X over Y through any intermediate node Z.
+total_controlled_shares(X,Y,J) :- controlled_shares(X,_,Y,P), J=msum(P).
+
+% There is control when the total number of controlled shares exceeds 0.5
+control(X, Y, P) :- total_controlled_shares(X,Y,P), P>0.5.
+
+@output("control").
+@post("control", "orderby(1)").
+
+% TUTORIAL: You can't output an atom to two different targets (i.e. the console
+%       and a CSV file). To work around this, you can simply create a
+%       copy-rule that creates a brand new fact to be saved elsewhere.
+%       Uncomment the lines below and run the program.
+
+% Copy-rule
+% control_disk(X, Y, P) :- control(X, Y, P).
+% 
+% @output("control_disk").
+% @bind("control_disk", "csv useHeaders=true", "./data/", "controls.csv").
+% @mapping("control_disk",0,"Controller","string").
+% @mapping("control_disk",1,"Controlled","string").
+% @mapping("control_disk",2,"Shares","string").
+

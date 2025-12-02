@@ -1,0 +1,38 @@
+% The Vadalog System: Datalog-based Reasoning for Knowledge Graphs
+% https://arxiv.org/pdf/1807.08709
+%
+% KeyPerson(x, p) → PSC(x, p)
+% Company (x) → ∃p PSC(x, p)
+% Control(y, x), PSC(y, f) → PSC(x, f)
+% PSC(x, f), PSC(v, f), x > y → StrongLink(x, y)
+%
+% In Vadalog it becomes:
+% Rule 1: psc(X, P) :- keyPerson(X, P).
+% Rule 2: psc(X, P) :- company (X).
+% Rule 3: psc(X, P) :- control(Y, X), psc(Y, P).
+% Rule 4: strongLink(X, Y) :- psc(X, P), psc(Y, P), X > Y.
+% 
+% Analysis:
+% Rule 1-X: universally quantified & harmless
+% Rule 1-P: universally quantified & harmless
+% Rule 2-X: universally quantified & harmless
+% Rule 2-P: existentially quantified & harmless
+% Rule 3-X: universally quantified & harmless
+% Rule 3-P: universally quantified & harmful & dangerous
+% Rule 3-Y: universally quantified & harmless
+% Rule 4-X: universally quantified & harmless
+% Rule 4-Y: universally quantified & harmless
+% Rule 4-P: universally quantified & harmful
+
+
+@input("keyPerson").
+@input("company").
+@input("control").
+
+psc(X, P) :- keyPerson(X, P).
+psc(X, P) :- company (X).
+psc(X, P) :- control(Y, X), psc(Y, P).
+strongLink(X, Y) :- psc(X, P), psc(Y, P), X > Y.
+
+@output("psc").
+@output("strongLink").

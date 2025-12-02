@@ -1,0 +1,17 @@
+# Schema inference
+
+Datalog+/- language supports data source binding through the https://www.vadalog.org/vadalog-handbook/latest/annotations-bindings.html[`@bind`] annotation. Vadacode improves user experience with binding with schema inference, i.e. the ability to automatically infer the schema of the data source and enrich with it the binding.
+
+Schema inference is available for CSV and https://parquet.apache.org/[Apache Parquet] input data sources.
+
+## Infer schema from input data
+
+Vadacode adds two contextual menus to the VSCode Explorer: when you right click on a CSV or a Parquet file, you are prompted with a **Vadacode: add to CSV/Parquet** action. Just click on it, and Vadacode will create a new binding at the current cursor position in the active Datalog+/- file. With a single click, you will get:
+
+* the `@input` statement for a new predicate after the name of the file;
+* the `@bind` annotation already configured with the relevat paths;
+* the `@mapping` statements for each column in the file, with the column name and type inferred from the file;
+* the documentation for the predicate, with the column names and types, in xref:vadacode-manual:ROOT:vadoc.adoc[] format.
+
+.Vadacode schema inference
+image::schema-inference.png[]

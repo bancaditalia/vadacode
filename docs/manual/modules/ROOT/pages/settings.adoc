@@ -1,0 +1,41 @@
+# Settings
+:experimental:
+
+The Settings editor provides a graphical interface to manage both user and workspace settings. To open the Settings editor, navigate to menu:Code[Settings > Settings]. Alternately, open the Settings editor from the *Command Palette* (kbd:[Shift+ctrl+P]/kbd:[Shift+⌘+P]) with *Preferences: Open Settings* or use the keyboard shortcut (kbd:[ctrl,,]/kbd:[⌘,,]).
+
+When you open the Settings editor, you can search and discover the settings you are looking for. When you search using the search bar, the Settings editor filters the settings to only show those that match your criteria. This makes finding settings quick and easy.
+
+
+VS Code applies changes to settings directly as you change them. You can identify settings that you modified by the colored bar on the left of the setting, similar to modified lines in the editor.
+
+## Vadacode settings
+
+Vadacode contributes its own settings, which you can review under the menu:Extensions[Vadacode] section of the Settings editor.
+
+You can also review Vadacode's settings from the Extensions view (kbd:[Shift+ctrl+X]/kbd:[Shift+⌘+X]) by selecting the extension and reviewing the *Feature Contributions* tab.
+
+### Reasoner endpoint
+
+Reasoner HTTP endpoint in `protocol://hostname:port` format.
+
+Defaults to: `http://127.0.0.1:8080.`
+
+### Reasoner logs application filename
+
+Reasoner log file path, used for monitoring updates from within Vadacode.
+
+Defaults to an empty string (no log is followed).
+
+### Reasoner logs application interval
+
+Reasoner log update interval in seconds. 
+
+Set to 0 to disable forced updates. Note that the log file is automatically updated when it changes, so this setting is only useful if you want to force updates at a specific interval.
+
+Defaults to `0` (no forced updates).
+
+### Auto switch to Datalog± tab
+
+Automatically switch to the "Datalog±" tab when a program is evaluated.
+
+Defaults to: `true`.

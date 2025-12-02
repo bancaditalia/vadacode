@@ -1,0 +1,43 @@
+% Constants and variables
+
+% 1. In Datalog+/- there are multiple data types, and as such you can have 
+%    several types of constants, like in imperative languages.
+%    Check more types at:
+%    https://vadalog.org/vadalog-handbook/latest/variables-types.html
+animal("dog"). animal("kangaroo"). animal("falcon").
+legs("dog", 4). legs("kangaroo", 2).
+wings("falcon", 2).
+
+% 2. You can have variables (in the sense of first order logic predicates or algebra, not imperative languages).
+
+% In Datalog+/- variables starts with a capital, while atoms start with a lowercase letter.
+% In this case, we are binding Animal to be the same in all atoms in which it's used in
+% the body of the rule.
+winged(Animal) :- animal(Animal), wings(Animal, Wings), Wings > 0.
+
+% TUTORIAL: Vadacode let's you rename a symbol, try it (using F2, rename winged to hasWings).
+%       Check that the final annotation has changed!
+
+% You can use whatever variables you specify in the body, even not all of them.
+% NOTE: If you don't care about binding a specific atom position, you can use 
+%      the anonymous variable ("_").
+% TUTORIAL: replace the variable with _ to have the warning go away.
+legged(Animal) :- animal(Animal), legs(Animal, _).
+
+% TUTORIAL: Vadacode tracks the atoms you use by building a complete index of your program.
+%       You can find the atoms in the Outline panel (just below workspace files) and
+%       the symbol table, which you can access by typing @ in the top search bar.
+
+@output("winged").
+@output("legged").
+
+% TUTORIAL: Vadacode supports inline execution of Datalog+/- code. You can trigger execution
+%       just using Ctrl+Shift+Enter or running "Vadacode: Evaluate program" in the 
+%       Command palette of Visual Studio Code.
+%       Vadacode send the program to the reasoner (an HTTP endpoint) and the results are shown in 
+%       a dedicated Datalog+/- panel below.
+%       Execute the code now and look at how results are shown with respect to @outputs.
+
+% TUTORIAL: Reasoner endpoint is configurable using Visual Studio Code settings.
+%       It currenly supports Vadalog invocation.
+%       To change it, open Settings (Ctrl+,), type Vadacode and look for the endpoint setting.

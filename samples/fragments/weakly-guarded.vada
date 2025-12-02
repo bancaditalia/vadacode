@@ -1,0 +1,7 @@
+% Weakly Guarded.
+% The only dangerous variable Y in the second rule
+% is in two guards i1 and i1.
+e("1").
+i1(X,Y,S) :- e(X).
+i2(X,Y,Z) :- i1(X,Y,_), i1(Z,Y,_).
+@output("i2").

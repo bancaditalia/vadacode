@@ -1,0 +1,138 @@
+# Vadoc
+
+Vadoc is a Vadacode feature that supports documentation of Datalog+/- programs, similar to https://en.wikipedia.org/wiki/Javadoc[Javadoc] or https://jsdoc.app/[Jsdoc]. You add documentation comments directly to your source code, right alongside the code itself. Vadacode will scan source code and generate hints for you to peruse.
+
+NOTE: As Vadoc is implemented as a special form of comment in Datalog+/- syntax, it has no effect on whatsoever feature of Datalog+/- language.
+
+## Adding documentation comments to your code
+
+Vadoc's purpose is to document your Datalog+/- program. It is assumed that you will want to document rules, interfaces (inputs, outputs), annotations, modules and so on.
+
+Vadoc comments should generally be placed immediately before the code being documented. Each comment must start with a `%%` sequence in order to be recognized by the JSDoc parser. Single-line comments (i.e. beginning with a single `%`) will be ignored.
+
+The simplest documentation is just a description of an atom:
+
+[source,datalogpm]
+----
+%% This is a description of the iown atom.
+iowns(X, Y, Q) :- owns(X, Y, Q1), owns(Y, Z, Q2), Q=Q1*Q2.
+----
+
+Adding a description is simple — just type the description you want in the documentation comment.
+
+Please note that if there is anything between the vadoc marker `%%` and the atom being documented (blank line, single comments), documentation will not applied at all.
+
+Special Vadoc tags can be used to give more information. For example, if the atom has terms (which is typically the situation), you can specify their type and meaning by adding a `@term` tag.
+
+.Using Vadoc tags to describe a rule
+[source,datalogpm]
+----
+%% Indirect ownership.
+%% 
+%% @term {string} owner Id of owner entity.
+%% @term {string} owned Id of owned entity.
+%% @term {number} percentage Percentage of owned shares.
+iowns(X, Y, Q) :- owns(X, Y, Q1), owns(Y, Z, Q2), Q=Q1*Q2.
+----
+
+## Supported tags
+
+.Supported Vadoc tags
+[%header,%autowidth,cols="1,2",grid=none,frame=none]
+|===
+>|Tag                    |Overview
+>|<<_exports>>|Documents Datalog+/- module exports.
+>|<<_module>> |Documents Datalog+/- module.
+>|<<_term>>   |Documents the term of an atom.
+|===
+
+### @exports
+
+#### Syntax
+
+`@exports <atomName>`
+
+#### Overview
+Use the @exports tag when documenting Datalog+/- modules which declares atoms used in including programs.
+
+#### Examples
+
+[source,datalogpm]
+----
+%% A module that exports an atom
+%% @exports a
+
+a(1).
+----
+
+#### Related links
+
+* <<_module>>
+
+### @module
+
+Documents a Datalog+/- module.
+
+### Overview
+The @module tag marks the current program as being its own module.
+
+Currently this tag has no effect whatsoever, other that documentation.
+
+#### Examples
+
+[source,datalogpm]
+----
+%% Main module
+%% @module main
+
+a(1).
+----
+
+#### Syntax
+
+`@module <moduleName>`
+
+### @term
+Documents the term of an atom.
+
+#### Syntax
+
+`@term {<termType>} <termName> <termDescription>`
+
+
+#### Overview
+The `@term` tag provides the name, type, and description of a term as it appears in an atom. 
+
+The `@term` tag requires you to specify the name of the term you are documenting. You can also include the term's type, enclosed in curly brackets, and a description of the term.
+
+The term type is not enforced, hence it can be anything you want to support as it supports a better comprehension of your code.
+
+#### Examples
+
+The following example shows how to use the @term tag to define an atom.
+
+[source,datalogpm]
+----
+%% Indirect ownership.
+%% 
+%% @term {string} Owner Id of owner entity.
+%% @term {string} Owned Id of owned entity.
+%% @term {number} Percentage Percentage of owned shares.
+iowns(X, Y, Q) :- owns(X, Y, Q1), owns(Y, Z, Q2), Q=Q1*Q2.
+----
+
+## Signature precedence
+
+IMPORTANT: Datalog+/- is a declarative language in which **rule order has no meaning** (precedence has no effect when declaring a fact or specifying a rule). Nevertheless, internally the atom metadata are memorized using the first occurrence of the atom in code. See xref:definitions.adoc for more information.
+
+Vadacode internal representation for atoms follows Vadoc documentation, if present; if not, then an internal representation is inferred by available terms.
+
+## Tooling
+
+### Code signature
+Once your code is commented, Vadoc comments are processed by Vadacode that creates an in-memory representation of the program symbols.
+
+One use of this mechanism is the xref:signatures.adoc[] feature which shows the available information of atoms integrated into Visual Studio Code hover information. As such, it is possible to show atom information **hovering on the documented atom** (appearing either in the body or in the head of a rule).
+
+.Atom information when hovering it in code
+image::atom-signature.png[]

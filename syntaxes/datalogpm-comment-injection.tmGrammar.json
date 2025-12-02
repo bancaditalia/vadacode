@@ -1,0 +1,39 @@
+{
+  "scopeName": "comment.injection",
+  "injectionSelector": "L:comment",
+  "patterns": [
+    { "include": "#bug-keyword" },
+    { "include": "#hack-keyword" },
+    { "include": "#fixme-keyword" },
+    { "include": "#todo-keyword" },
+    { "include": "#note-keyword" },
+    { "include": "#comment-keyword" },
+    { "include": "#todo-keyword" }
+  ],
+  "repository": {
+    "bug-keyword": {
+      "match": "BUG",
+      "name": "keyword.bug"
+    },
+    "hack-keyword": {
+      "match": "HACK",
+      "name": "keyword.hack"
+    },
+    "fixme-keyword": {
+      "match": "FIXME",
+      "name": "keyword.fixme"
+    },
+    "todo-keyword": {
+      "match": "TODO",
+      "name": "keyword.todo"
+    },
+    "note-keyword": {
+      "match": "NOTE",
+      "name": "keyword.note"
+    },
+    "comment-keyword": {
+      "match": "COMMENT",
+      "name": "keyword.comment"
+    }
+  }
+}

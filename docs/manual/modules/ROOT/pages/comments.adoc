@@ -1,0 +1,27 @@
+# Comments
+
+NOTE: Vadacode comments are by definition comments, and as such are dropped by the reasoner.
+
+Vadacode supports two main uses for comments: <<Colored hints>> (documented here) and code documentation using xref:vadoc.adoc[Vadoc].
+
+## Colored hints
+
+Vadacode Scan for `BUG`, `HACK`, `FIXME`, `TODO`, `NOTE`, `COMMENT` comments within your source, and colors them in code so you can mark clearly code sections that need some attention.
+
+To add such comments, just write the built-in keyword (e.g. `TODO`), followed by a semicolon `:`.
+
+.Colored hints Vadacode syntax
+[source,datalogpm]
+----
+% BUG: example
+% HACK: example
+% FIXME: example
+% TODO: example
+% NOTE: example
+% COMMENT: example
+----
+
+.Colored hints as shown in Dark Modern theme
+image::comment-hints.png[]
+
+

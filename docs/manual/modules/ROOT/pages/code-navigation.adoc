@@ -1,0 +1,22 @@
+# Code completion
+:experimental: // Required for keybinding syntax (https://docs.antora.org/antora/latest/asciidoc/ui-macros/)
+
+Vadacode supports Microsoft IntelliSense, which is a general term for various code editing features including: code completion, parameter info, quick info, and member lists. IntelliSense features are sometimes called by other names such as "code completion", "content assist", and "code hinting."
+
+## Atom completion
+
+Vadacode language service provides intelligent code completions based on Datalog+/- semantics and an analysis of your source code. Suggestions will pop up as you type. If you continue typing characters, the list of members (annotations, atoms, etc.) is filtered to only include members containing your typed characters. Pressing kbd:[tab] or kbd:[enter] will insert the selected member.
+
+.Code completion for atoms
+image::code-completion.png[]
+
+
+## Trigger characters
+
+You can trigger completion in any editor window by typing a trigger character.
+
+In Vadacode, the kbd:[@] character triggers the automatic completion of annotations.
+
+.Intellisense activation using at trigger character for annotations
+image::intellisense-trigger.png[]
+

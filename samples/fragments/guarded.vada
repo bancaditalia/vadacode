@@ -1,0 +1,5 @@
+% Guarded. G is the guard
+s("a", "c").
+t("a", "c").
+g("a", "b", "d").
+t(X,Z) :- s(X,Y), t(Y,K), g(X,Y,K).

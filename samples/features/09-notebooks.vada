@@ -1,0 +1,41 @@
+% Data mappings.
+
+% To end on a high note, we show how Datalog+/- intensional component
+% can really be an elegant and readable formalization.
+
+% TUTORIAL: Vadacode supports notebooks, which allow for the interactive
+%       use of Datalog+/-. These notebooks live in Visual Studio Code and benefit
+%       from the same features that this code editor has. You can create a
+%       Datalog+/- Notebook by running the "Vadacode: Create notebook command" 
+%       from the Command Palette. Now:
+%       * Create an empty notebook
+%       * Clear contents and add a markdown cell
+%       * Paste these contents:
+%         # Notebooks support
+%         Vadacode supports Datalog+/- notebooks: you can have images, formulas, 
+%.        diagrams inlined with Datalog+/- code!
+%         <img height="200" src="09-notebooks-controls.png">
+%       * Copy this program in a Datalog+/- cell, then continue there the demo.
+
+% Controls have been already computed.
+@input("controls").
+@bind("controls", "csv useHeaders=true", "./data/", "controls.csv").
+@mapping("controls",0,"Controller","string").
+@mapping("controls",1,"Controlled","string").
+@mapping("controls",2,"Shares","string").
+
+% The ultimate controller is just a controlling entity which is not controlled 
+% by anyone else. The anonymous variable (_) is used for binding to every possible
+% value of a variable.
+ultimate_controller(X,Y) :- controls(X,Y,_), not controls(_,X,_).
+
+% TUTORIAL: Vadacode supports atom definitions, that is where the atom is first declared.
+%       Right-click on the controls atom in the body of the rule above, and select the
+%       Go to Definition menu to highlight the relevant entry (the @input annotation).
+
+% NOTE: If the atom is read as input, that is counted as a declaration, like in this
+%       case (even if the @input annotation appears below in the program).
+%       Otherwise, since Datalog+/- is a declarative language in which rule order has no meaning,
+%       the first appearance of an atom is considered its declaration.
+
+@output("ultimate_controller").

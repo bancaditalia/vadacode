@@ -1,0 +1,1 @@
+* xref:vadacode-manual:ROOT:diagnostic-codes.adoc[]

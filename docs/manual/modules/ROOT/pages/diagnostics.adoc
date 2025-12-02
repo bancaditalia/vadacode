@@ -1,0 +1,46 @@
+# Diagnostics
+:experimental:
+
+Diagnostics are a way to indicate issues with the code.
+
+## Errors & warnings
+
+Vadacode constantly analyze your code in the background. Since we love bug-free code, warnings and errors show up in multiple places:
+
+* In the Status Bar, there is a summary of all errors and warnings counts.
+* If you open a file that has errors or warnings, they will be rendered <<Inline code,inline>> with the text and in the overview ruler.
+* You can click on the summary or press kbd:[shift+command+M] to display the <<Problems tab>> with a list of all current errors.
+
+NOTE: All diagnostics are documented in the xref:diagnostic-codes.adoc[] page; error reporting always include diagnostic identifiers (e.g. `1019`) which are hyperlinked to manual pages with more information about the error.
+
+.All errors, warnings and hints include a hyperlinked diagnostic code (top-right corner of the hover)
+image::diagnostic-code.png[]
+
+
+### Inline code
+
+Diagnostics are shown inline with the usual **squiggly line** aesthetics.  As Vadacode doesn't specify custom colors, coloring follows and matches the selected xref:architecture.adoc#theming[theme].
+
+Generally errors are shown in red, warnings in yellow, and hints in gray. You can always hover on the position marked by a squiggly line to get the full qualification of the diagnostic.
+
+.Inline diagnostics shown as squiggly lines
+image::diagnostics-inline.png[]
+
+[id=problems-tab]
+### Problems tab
+
+Diagnostics are gathered as well in the Problems tab of Visual Studio Code, where you can find them along with relevant information (type, message, source, error code, position).
+
+.Diagnostics shown cumulatively in the Problems tab
+image::diagnostics-problems.png[]
+
+## Error Tolerant Parser
+
+Most of the time, the code in the editor is incomplete and syntactically incorrect, but developers would still expect autocomplete and other language features to work.
+
+Therefore, an *error tolerant parser* is necessary: the parser generates meaningful https://en.wikipedia.org/wiki/Abstract_syntax_tree[Abstract syntax tree] (AST) from partially complete code, and Vadacode provides language features based on the AST.
+
+You can easily see the advantage of this approach if you add a parsing error in the middle of a Datalog+/- program: if the error is recoverable, Vadacode is able to resume understanding code regularly.
+
+.Error tolerant parsing after an unrecognized symbol
+image::tolerant-parsing.png[]

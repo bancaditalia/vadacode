@@ -1,0 +1,33 @@
+{
+  "name": "datalogpm-parser",
+  "version": "1.8.4",
+  "description": "Vadacode results table renderer",
+  "author": "Banca d'Italia",
+  "license": "SSPL-1.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c --bundleConfigAsCjs"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@shoelace-style/shoelace": "^2.4.0",
+    "@types/vscode-notebook-renderer": "^1.72.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "rollup": "^3.19.1",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-postcss": "^4.0.2"
+  }
+}

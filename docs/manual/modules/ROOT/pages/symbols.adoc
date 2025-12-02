@@ -1,0 +1,9 @@
+# Symbols
+:experimental:
+
+## Go to Symbol
+
+You can navigate symbols inside a file with kbd:[shift,ctrl,O]/kbd:[shift,cmd,O]. Press kbd:[Up] or kbd:[Down] and navigate to the place you want.
+
+.Symbols dropdown
+image::symbols.png[]

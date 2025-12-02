@@ -1,0 +1,55 @@
+# Architecture
+:experimental:
+
+NOTE: This page is dedicated to Vadacode extension development, i.e. it's about _how it's done_ instead of _what does it do_. If you are not interested in VSCode internals, just skip this section.
+
+## Language server
+
+Language Server is a special kind of Visual Studio Code extension that powers the editing experience for many programming languages. With Language Servers, you can implement autocomplete, error-checking (diagnostics), jump-to-definition, and many other language features supported in VS Code.
+
+### Why Language Server
+
+Implementing language features in VS Code presents some limitations which mainly boil down to three points:
+
+-    Language Servers are usually implemented in their native programming languages, which for VS Code is a Node.js runtime.
+-    Language features can be resource intensive, hence having everything executed in-process would affect VSCode's performance.
+-    Integrating multiple language toolings with multiple code editors could involve significant effort, as N different code editors would require the coding of N different variants for each language tool.
+
+A Language Server embeds all the language tooling in its own process: hence it can be implemented in any language, runs in its own process to avoid degrading the editor performance, and talks the https://microsoft.github.io/language-server-protocol/[Language Server Protocol] (standardized by Microsoft).
+
+### Vadacode Language Server
+
+Vadacode features are mostly implemented through a Language Server; some specific features can only be implemented on the client due to filesystem restrictions or vscode architecture.
+
+[id=theming]
+## Theming
+
+Theming is about assigning colors and styles to tokens. https://code.visualstudio.com/docs/getstarted/themes[Color themes] enable you to modify the colors in the Visual Studio Code user interface to match your preferences and work environment. A Color Theme affects both the VS Code user interface elements and the editor highlighting colors.
+
+To select a different Color Theme:
+
+* Select the menu:Code[Settings > Theme > Color Theme] menu item, or use the menu:Preferences[Color Theme] command (kbd:[ctrl K] kbd:[ctrl T] on Windows, kbd:[⌘K] kbd:[⌘T] on Mac) to display the Color Theme picker.
+* Use the kbd:[Up] and kbd:[Down] keys to navigate through the list and preview the colors of the theme.
+* Select the theme you want and press kbd:[Enter].
+
+### Vadacode support
+
+By design choice, Vadacode **does not implement any highlight override**, but instead makes use of the available xref:semantic-highlighting.adoc[language tokens]. This ensures that Vadacode is completely compatible with all Visual Studio Code themes and avoids any style-fight which may happen for example in light-dark theme choices which may or may not work with specific token colors.
+
+
+Theming rules are specified in Color Theme files (JSON format). Users can also customize the theming rules in the user settings. As a theme user (as opposed to a theme maintainer), you can force semantic highlighting to be enabled for that theme by setting your editor.`semanticHighlighting.enabled` setting to true, or doing something like the following in `settings.json`:
+
+[source,json]
+----
+"editor.semanticTokenColorCustomizations": {
+    "[Tokyo Night]": {
+        "enabled": true,
+    },
+    "[Tokyo Night Storm]": {
+        "enabled": true,
+    },
+    "[Tokyo Night Light]": {
+        "enabled": true,
+    },
+},
+----

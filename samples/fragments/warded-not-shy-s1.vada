@@ -1,0 +1,5 @@
+% Warded, not shy (violates S1)
+e("a").
+i1(X,Y) :- e(X).
+i2(X,Z) :- i1(X,Y), i1(Z,Y).
+@output("i2").

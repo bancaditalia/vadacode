@@ -1,0 +1,13 @@
+.DS_Store
+
+out
+node_modules
+client/server
+.vscode-test
+
+*.vsix
+
+.test-extensions
+.test-storage
+
+tsconfig.tsbuildinfo

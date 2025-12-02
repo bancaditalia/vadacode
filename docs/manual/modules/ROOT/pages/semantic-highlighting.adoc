@@ -1,0 +1,95 @@
+# Semantic highlighting
+
+VSCode 1.43 introduce https://github.com/microsoft/vscode/wiki/Semantic-Highlighting-Overview[Semantic Highlighting] as a new feature for all VSCode themes.
+
+Vadacode uses instead of Semantic Highlighting, because of it can unlock new and interesting ways to show information about your code.
+
+## What is the difference between syntax and semantic highlighting?
+
+Syntax highlighting colors the text based on lexical rules. In VS Code the lexical rules are expressed as regular expressions contained in a TextMate grammar.
+
+Semantic highlighting enriches the syntax coloring based on symbol information from a language service that has the full understanding of the project. Based on this understanding each identifier gets colored & styled with the color of the symbol it resolves to. A constant variable name is rendered as constant throughout the file, not just in its declaration. Same for parameter names, property names, class names and so on.
+
+.Semantic highlighting example in Vadacode: existential variables are rendered in a different colors, and ground predicates are rendered in bold.
+image::semantic-highlight.png[width=70%]
+
+NOTE: If you see the highlight change after a short time it's perfectly fine: the server takes a while to load and analyze the project, that's why the highlighting comes in delayed depending on the project size. To improve user experience, Vadacode uses two separate highlighting techniques: the first is based off a TextMate grammar and is applied immediately, leaving some slack for semantic information to come by.
+
+## Which themes offer semantic highlighting
+In 1.43.1, out-of-the-box, only built-in themes show semantic highlighting. Other themes need to opt-in to semantic highlighting by a new property in the theme file:
+
+[source,json]
+----
+"semanticHighlighting": true
+----
+
+Users can override that setting in the user settings:
+
+[source,json]
+----
+"editor.semanticTokenColorCustomizations": {
+	"[Atom One Dark]": {
+		"enabled": true
+	}
+}
+----
+
+## What semantic tokens are available and how they are themed?
+
+.Tokens
+[%header,%autowidth,cols="1,1",grid=none,frame=none]
+|===
+>|Language token                    |Semantic token
+>|COMMENT      |comment
+>|ATOM         |atom
+>|INT          |int
+>|DOUBLE       |double
+>|DATE         |date
+>|STRING       |string
+>|BOOLEAN      |boolean
+>|VARIABLE     |variable
+>|ANNOTATION   |annotation
+>|AT           |at
+>|ID           |id
+>|ANON_VAR     |anon_var
+>|IMPLICATION  |implication
+>|EQ           |eq
+>|DOT          |dot
+|===
+
+.Modifiers
+[%header,%autowidth,cols="1,1",grid=none,frame=none]
+|===
+>|Language token |Semantic token
+>|UNUSED         |deprecated
+>|GROUND         |static
+>|TEMPORAL       |temporal
+>|EXISTENTIAL    |readonly
+|===
+
+## How can I find out what semantic token is associated to a symbol?
+
+As an end user you are not interested directly in this information but from time to time you might wonder what is happening under the hood.
+
+To find out what semantic token is associated to a symbol, just:
+
+-   Open a .vada or .vadanb file.
+-   Set the cursor to the symbol to inspect and run the ``Developer: Inspect Editor Tokens and Scopes`` command.
+
+## Is my theme compatible with Vadacode semantic highlighting?
+
+Vadacode does its best to ensure that semantic highlighting works with all themes, but some typical constructs of logic programming don't port well to the imperative model. One of such constructs is the `existential` semantic token modifier. To support all themes we map it to `readonly`; nevertheless, this might not be the best choice for all themes.
+
+For this, you can customize your theme's settings to apply specific coloring. Here's an example which can be applied in VSCode `settings.json`:
+```json
+"editor.semanticTokenColorCustomizations": {    
+		"[Default Dark Modern]": {
+				"rules": {
+						"variable.readonly": {
+								"foreground": "#ff0000"
+						}
+				}
+		}
+}
+```
+

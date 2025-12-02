@@ -1,0 +1,71 @@
+% Equality Generating Dependencies (part 1)
+
+% "Equality-generating dependencies (EGDs) allow to fully exploit the 
+% power of existential quantification in ontological reasoning settings 
+% modeled via Tuple-Generating Dependencies (TGDs), by enabling 
+% value-assignment or forcing the equivalence of fresh symbols."
+% https://dl.acm.org/doi/abs/10.14778/3565838.3565850
+
+% 1. Let's reproduce the famous "closely related" reasoning example.
+%    Basically, we go through the graph node by node and edge by edge.
+%    Obviously bigger graphs are read from data sources, but for 
+%    prototyping this is a good way to go.
+
+% TUTORIAL: Vadacode is totally integrated in Visual Studio Code.
+%       This means that the developer has a full suite of features
+%       which can be used to improve usability, productivity
+%       and ultimately quality-of-life in development.
+%       For example, you can edit a file while checking an image
+%       on the panel aside. So drag `07-egds-01.vada` on the right
+%       hand of the screen to dock it horizontally.
+
+person("sunglasses").
+person("woman").
+person("rogue").
+
+brotherOf("sunglasses", "rogue").
+partners("woman", "rogue").
+partners("rogue", "woman").
+
+% TUTORIAL: Vadacode supports code actions, which are workflow automations to perform common
+%       tasks which may prove useful for the developer.
+%       For example, here unused atoms are marked as warnings. To suppress them, 
+%       you can use Code actions.
+%       Go to one of the warnings, press Ctrl+./Cmd+. (dot) or click on the lightbulb icon that
+%       appears near the atom name.
+%       Expect more actions in the future!
+
+% 2. We implement the logic reasoning that derives the families.
+%    Basically, we write the logic implications bit by bit,
+%    outputting the results for debugging until we get what
+%    we expect.
+
+% Any person belongs to a family.
+% We model this concept as a relationship between the person and the family.
+% As we are creating the family as a null concept, we say that it is a "labeled null".
+memberOf(X, F) :- person(X).
+
+% TUTORIAL: Labeled nulls are ∃-variables, and are assumed to be different from
+%       one another unless other rules say otherwise. Run the code with the EGDs below
+%       commented out to see how families are inferred to be different, as still we
+%       didn't account for familiar relationships between people.
+
+% 3. An Equality-generating dependency defines that two labeled nulls are the same entity.
+% Here we state that a familiar relationship implies belonging to the same family, i.e.
+% * brothers have the same family.
+% F1=F2 :- brotherOf(X, Y), memberOf(X, F1), memberOf(Y, F2).
+% * partners have the same family.
+% F1=F2 :- partners(X, Y), memberOf(X, F1), memberOf(Y, F2).
+
+% TUTORIAL: Uncomment the EGDs above, one by one, and see that all the people 
+%       have the same family.
+
+@output("memberOf").
+% @bind("memberOf", "csv useHeaders=true", "./data/", "member-of.csv").
+% @mapping("memberOf", 0, "Person", "string").
+% @mapping("memberOf", 1, "Family", "string").
+
+% TUTORIAL: When an output is bound to a data sink, no output is sent to the console.
+%       To see this, uncomment the binding above and run the program.
+%       Check member-of.csv to see data structure.
+

@@ -1,0 +1,46 @@
+// SPDX-License-Identifier: SSPL-1.0
+// Copyright (c) 2023-present Banca d'Italia
+
+//  _   __        __                 __
+// | | / /__ ____/ /__ ________  ___/ /__
+// | |/ / _ `/ _  / _ `/ __/ _ \/ _  / -_)
+// |___/\_,_/\_,_/\_,_/\__/\___/\_,_/\__/
+// 
+// @file App styles.
+
+.atoms {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 1rem;
+}
+
+.error {
+  color: #f14c4c;
+}
+
+.reasoner-atom-table {
+  border: solid 1px #aaa;
+
+  font: normal 1rem Arial, sans-serif;
+
+  text-align: center;
+
+  min-width: 150px;
+
+  caption {
+    font-size: 1.1rem;
+  }
+
+  thead th {
+    padding: 5px;
+  }
+  tbody {
+    td {
+      padding: 5px;
+    }
+  }
+}

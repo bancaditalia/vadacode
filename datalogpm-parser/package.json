@@ -1,0 +1,35 @@
+{
+  "name": "datalogpm-parser",
+  "version": "1.8.4",
+  "description": "ANTLR4-based Datalog+/- parser",
+  "author": "Banca d'Italia",
+  "license": "SSPL-1.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "fix-antlr4-lexer": "./prepend.sh '//@ts-nocheck' src/grammar/DatalogpmLexer.ts",
+    "fix-antlr4-listener": "./prepend.sh '//@ts-nocheck' src/grammar/DatalogpmListener.ts",
+    "fix-antlr4-parser": "./prepend.sh '//@ts-nocheck' src/grammar/DatalogpmParser.ts",
+    "fix-antlr4-visitor": "./prepend.sh '//@ts-nocheck' src/grammar/DatalogpmVisitor.ts",
+    "antlr4": "./bin/get-antlr.sh && ./antlr4-generate.sh && npm run fix-antlr4-lexer && npm run fix-antlr4-listener && npm run fix-antlr4-parser && npm run fix-antlr4-visitor",
+    "build-full": "npm run antlr4 && npm run build",
+    "build": "rollup -c --bundleConfigAsCjs"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.0",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.0",
+    "rollup": "^4.23.0"
+  },
+  "dependencies": {
+    "antlr4": "^4.13.1-patch-1"
+  }
+}

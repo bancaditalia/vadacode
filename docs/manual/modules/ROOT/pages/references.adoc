@@ -1,0 +1,15 @@
+# References
+:experimental:
+
+Vadacode shows reference search results as separate view, just like search results. It complements the peek view presentation that is also built into VS Code.
+
+To show references to an atom, right-click on it to open its context menu and select menu:Find All References[] (or alternately, via kbd:[Alt,Shift,F12]).
+
+Vadacode will then show references in a dedicated tree view that sits in the sidebar.
+
+.Find All References side view
+image::find-references.png[]
+
+You can navigate through search results; when an item is selected, you are brought directly to the line containing the reference.
+
+You can even remove references from the list using the handy cross symbol.

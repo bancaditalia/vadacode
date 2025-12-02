@@ -1,0 +1,7 @@
+/src/grammar/*
+!/src/grammar/.gitkeep
+/out
+
+/bin/**
+!/bin/antlr-4.13.1-complete.jar.sha256
+!/bin/get-antlr.sh

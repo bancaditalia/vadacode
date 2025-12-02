@@ -1,0 +1,71 @@
+<div *ngIf="loading" class="loading">Waiting for reasoning results...</div>
+<div *ngIf="!loading">
+  <div *ngIf="!results && !error" class="ready">
+    <p>Reasoning task results will be shown here.</p>
+    <p>
+      To execute a Datalog+/- program, use the
+      <strong>Vadacode: Evaluate program</strong> command. You can also use the
+      keyboard shortcut
+      <kbd><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Enter</kbd></kbd
+      >.
+    </p>
+  </div>
+  <!-- Reasoning results -->
+  <div *ngIf="results" class="results">
+    <p>Reasoning results (execution {{ results.id }})</p>
+    <div class="atoms">
+      <div *ngFor="let atom of results.resultSet | keyvalue">
+        <table class="reasoner-atom-table">
+          <caption>
+            Atom
+            <code>{{ atom.key }}</code>
+          </caption>
+          <thead>
+            <tr>
+              <th
+                *ngFor="
+                  let column of results.columnNames[$any(atom.key).toString()]
+                "
+                scope="col"
+              >
+                {{ column }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of $any(atom.value)">
+              <td *ngFor="let field of row">{{ field }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th
+                scope="row"
+                [attr.colspan]="
+                  results.columnNames[$any(atom.key).toString()].length
+                "
+              >
+                {{ $any(atom.value).length }}
+                row{{ $any(atom.value).length > 1 ? "s" : "" }}
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <!-- End of atoms -->
+  </div>
+  <!-- End of results -->
+
+  <!-- Error message -->
+  <div *ngIf="error" class="error">
+    <p>Error</p>
+    <pre>{{ error | json }}</pre>
+  </div>
+</div>
+<!-- Raw vscode message for inspection-->
+<div *ngIf="vscodeMessage">
+  <hr />
+  <p>Raw vscode message:</p>
+  <pre>{{ vscodeMessage | json }}</pre>
+</div>

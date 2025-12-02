@@ -1,0 +1,48 @@
+{
+  "name": "vadacode-lsp-server",
+  "description": "Vadacode Language Server Protocol (LSP) server.",
+  "version": "1.8.4",
+  "author": "Banca d'Italia",
+  "license": "SSPL-1.0",
+  "private": true,
+  "publisher": "bancaditalia",
+  "engines": {
+    "node": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/vscode-extension-samples"
+  },
+  "dependencies": {
+    "comment-parser": "^1.3.1",
+    "graphology": "^0.25.4",
+    "graphology-components": "^1.5.4",
+    "graphology-dag": "^0.4.1",
+    "graphology-operators": "^1.6.1",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1",
+    "typedi": "^0.10.0",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.11"
+  },
+  "scripts": {
+    "compile": "tsc",
+    "test": "npm run compile && mocha --ui tdd --timeout 5000 ./out/test/*.js",
+    "build": "rollup -c --bundleConfigAsCjs",
+    "watch": "rollup -c --bundleConfigAsCjs -w",
+    "diagnostic-codes": "npx ts-node scripts/diagnostic-codes.ts"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^4.0.3",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/mocha": "^10.0.8",
+    "graphology-types": "^0.24.7",
+    "mocha": "^10.7.3",
+    "rollup": "^3.29.5",
+    "ts-node": "^10.9.2"
+  }
+}

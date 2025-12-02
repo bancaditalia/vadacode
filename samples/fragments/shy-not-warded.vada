@@ -1,0 +1,7 @@
+% Shy, not warded
+edb1("a").
+edb2("b").
+idb1(X,Y) :- edb1(X).
+idb2(Z,X) :- edb2(X).
+idb3(X,Y,Z) :- idb1(X,Y), idb2(Z,X).
+@output("idb3").

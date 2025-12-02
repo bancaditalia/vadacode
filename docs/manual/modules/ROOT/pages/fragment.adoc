@@ -1,0 +1,86 @@
+# Fragment analysis
+:experimental:
+
+## Diagnostics
+
+Logic programming allows for a broad range of reasoning tasks, some of which have big implications on how the program is computed: this can impact in particular **decidability** (if there exists an effective method for deriving the correct answer), **termination** (whether computation terminates or not), and **computational complexity** (the actual resource usage for solving a problem).
+
+Vadacode constantly analyze your code in the background to highlight issues that could impede execution, helping you to write and fix your programs. Similarly to xref:diagnostics.adoc[code diagnostics], the issues are shown inline with the usual **squiggly line** aesthetics and reported in the Problems tab of Visual Studio Code.
+
+Vadacode implements several fragment-specific xref:diagnostic-codes.adoc[] which detail whether rules, predicates or variables can be used safely.
+
+.How Warded Datalog± diagnostics look in Vadacode
+image::warded-diagnostic.png[alt=Warded Datalog± diagnostics in Vadacode]
+
+## Active fragment
+
+When you install Vadacode, the status bar at the bottom of Visual Studio Code is enriched by a new selector:
+
+.Fragment selector in Visual Studio Code status bar
+image::fragment-bar.png[alt=Fragment selector in Visual Studio Code status bar,width=80%]
+
+The widget shows the currently active fragment, which is used to determine the set of diagnostics to apply to your code. By default, the fragment is set to `Warded`. You can change the active fragment by clicking on the widget and selecting a different one from the quick-pick list that appears.
+
+.Fragment quick-pick list
+image::fragment-choices.png[]
+
+Active fragment is a per-workspace setting: you choose the fragment you want to work in, and the fragment is applied to the diagnostics of all files.
+
+Active fragment is stored in VSCode global state, so it's kept after you close VSCode.
+
+
+IMPORTANT: The active fragment setting affects only syntax evaluation and does not change the behavior of the reasoner.
+
+## Available fragments
+
+Vadacode supports the following fragments; 
+
+* **Plain Datalog**: datalog without existential operator;
+* **Linear**: allows a single predicate in the body;
+* **Afrati Linear**: allows for joins with at most one intensional predicate;
+* <<Warded Datalog±>>: a form of Datalog that ensures termination by restricting nulls propagation; more information at <<shy>>;
+* **Shy**: a form of Datalog that ensures termination by restricting nulls propagation; more information at <<warded>>;
+* **Guarded**: employs a forms of __guardedness__ (an atom conainining prescribed variables) to ensures decidability; more information at <<guarded>>;
+* **Weakly Guarded**: employs a forms of __guardedness__ (an atom conainining prescribed variables) to ensures decidability; more information at <<guarded>>;
+* **Weakly Frontier**: employs a forms of __guardedness__ (an atom conainining prescribed variables) to ensures decidability; more information at <<guarded>>;
+* **Frontier**: employs a forms of __guardedness__ (an atom conainining prescribed variables) to ensures termination; more information at <<guarded>>.
+
+## Show all/no violations
+
+When selecting fragment, you can opt for **Show all violations** which enables all possible syntactic restrictions of supported fragments.
+
+Similarly, Vadacode allows to select **Datalog ∃** as the active fragment, which poses no restrictions on the use of the language and hence shows no fragment violations.
+
+## Warded Datalog±
+
+Warded Datalog±, a recent member of the Datalog family, is a special fragment for Vadacode team because it's the core of the Vadalog language. In fact, the full Vadalog language was originally obtained as an extension to the Warded Datalog± core with features of practical utility (think I/O, aggregations, annotations, and so on).
+
+The idea behind the notion of "wardedness" is taming the propagation of nulls during the construction of the answer in reasoning process.
+
+Warded Datalog± is described in <<vadalog>>.
+
+## Equality-generating dependencies
+
+EGDs are an advanced feature of Datalog+/- language that enables value-assignment or forcing the equivalence of fresh symbols. Essentially, it allows to constrain labeled nulls to have assigned the same values, yielding to the possibility to group new facts.
+
+In general, an EGD has the form: `X=Y :- body`, where `X` and `Y` are two existential variables used in the body of the rule. In Vadacode, the equal sign is decorated with a Visual Studio Code hint indicating that it's an EGD.
+
+.How EGDs look in Vadacode
+image::egd-hints.png[]
+
+Nevertheless, admitting any kind of EGD in a Datalog+/- program would pose decidability issues, hence the introduction of _harmless EGDs_, a specific type of EGD under which ontological reasoning is decidable and `PTIME`; more specifically, an EGD is harmless if it respects a sufficient syntactic condition, namely "safe taintedness". 
+
+As this condition might be hard to evaluate in practice, especially in complex programs, Vadacode shows if this condition is not met with an error diagnostic.
+
+.A non-harmless EGD detected as an error; `Ancestor` variable is in a tainted position and is used in a join.
+image::egd-diagnostic.png[]
+
+Vadalog EGDs are described in <<egd>>. Vadacode supports EGD checks in the Warded Datalog± fragment.
+
+[bibliography]
+## References
+
+* [[[egd]]] L. Bellomarini, D. Benedetto, M. Brandetti, E. Sallinger, Exploiting the Power of Equality-Generating Dependencies in Ontological Reasoning, Proceedings of the VLDB Endowment, Volume 15, Issue 13, Pages 3976 - 3988, https://doi.org/10.14778/3565838.3565850[DOI], https://www.vldb.org/pvldb/vol15/p3976-bellomarini.pdf[Read the paper]
+* [[[vadalog]]] L. Bellomarini, G. Gottlob, E. Sallinger, The Vadalog System: Datalog-based Reasoning for Knowledge Graphs, Proceedings of the VLDB Endowment, Volume 11, Issue 9, Pages 975 - 987, https://doi.org/10.14778/3213880.3213888[DOI], https://www.vldb.org/pvldb/vol11/p975-bellomarini.pdf[Read the paper]
+* [[[guarded]]] G. Gottlob, S. Rudolph, M. Simkus, Expressiveness of Guarded Existential Rule Languages, PODS '14: Proceedings of the 33rd ACM SIGMOD-SIGACT-SIGART symposium on Principles of database systems, Pages 27-38, https://doi.org/10.1145/2594538.259455[DOI], https://www.dbai.tuwien.ac.at/research/project/fair/publications/GottlobRS-ExpressivenessOfGuardedExistentialRuleLanguages.pdf[Read the paper]
+* [[[shy]]] T. Baldazzi, L. Bellomarini, M. Favorito, E. Sallinger, On the Relationship between Shy and Warded Datalog+/-, Proceedings of the 19th International Conference on Principles of Knowledge Representation and Reasoning — Main Track, Pages 395–399, July 2022, https://doi.org/10.24963/kr.2022/39[DOI], https://proceedings.kr.org/2022/39/kr2022-0039-baldazzi-et-al.pdf[Read the paper]

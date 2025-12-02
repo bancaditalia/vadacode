@@ -1,0 +1,184 @@
+# GitHub Copilot integration
+:experimental:
+
+There are several ways in which Vadacode supports the interaction with Copilot. We have a specialized chat participant called <<Vadacoder>>, and a set of custom instructions and command-specific prompts that implement knowledge of Datalog+/- language which can be installed in your workspace. Both features rely on the use of Copilot as-is, with off-the-shelf models and without the need of custom (e.g., fine-tuned) models.
+
+.Vadacode host several features for using Copilot.
+image::copilot-cover.png[]
+
+NOTE: All the features listed in this page are available if you have the GitHub Copilot extension installed and enabled in your workspace. Go to the https://github.com/features/copilot/extensions[GitHub Copilot extension] for more information. Since https://code.visualstudio.com/updates/v1_99[VSCode 1.99], you can use both serviced and https://code.visualstudio.com/docs/copilot/language-models#_bring-your-own-language-model-key[self-hosted LLMs].
+
+CAUTION: The features listed in this page are experimental. Copilot integration is evolving very rapidly (see for example https://code.visualstudio.com/updates/v1_102[this VSCode release], where most of the changes are to Copilot integration), so features may be added, change or be removed in future releases.
+
+## Vadacoder
+
+NOTE: After the release of Custom Instructions, domain-specific chat participants like Vadacoder are less relevant, but still useful for some tasks. One example is chatting with Copilot about Datalog+/- language outside from a `.vada` file context.
+
+VS Code has several built-in chat participants like `@vscode`, `@terminal`, or `@workspace`. They are optimized to answer questions about their respective domains.
+Vadacode contributes a `@vadacoder` GitHub Copilot assistant that knows about Datalog+/- language.
+
+To chat with Vadacoder, mention explicitly `@vadacoder` in GitHub Copilot chat prompt and write your questions. You can ask it to scaffold code, or you can paste code and have it explained.
+
+But you can do more: `@vadacoder` supports specialized commands for common tasks.
+
+### `/write` command
+
+If you want to swiftly generate some programs you can use the `/write` command. This allows you to specify programs in natural language and write them directly in Datalog+/- syntax.
+
+Let's see how it works; paste this prompt:
+
+> `@vadacoder /write` Scaffold some facts for companies, like company(id, name, address) and ownerships, like owns(idCompanyA, idCompanyB, percent)
+
+[source,datalogpm]
+----
+% Companies: company(ID, Name, Address)
+company(1, "Acme Corp", "123 Main St").
+company(2, "Beta Ltd", "456 Oak Ave").
+company(3, "Gamma Inc", "789 Pine Rd").
+company(4, "Delta LLC", "321 Maple Blvd").
+
+% Ownerships: owns(OwnerID, OwnedID, Percent)
+owns(1, 2, 60.0).
+owns(2, 3, 75.0).
+owns(3, 4, 50.0).
+owns(1, 4, 10.0).
+----
+
+We can then expand the data. Try pasting this prompt:
+
+> `@vadacoder /write` Add three more companies in Italy which sell ice cream, and make company "1" control company 4.
+
+[source,datalogpm]
+----
+% Add three more Italian ice cream companies
+company(5, "Gelato Roma", "Via Veneto 10, Rome, Italy").
+company(6, "Dolce Vita Gelateria", "Corso Italia 22, Milan, Italy").
+company(7, "Fresco Gelato", "Piazza San Marco 5, Venice, Italy").
+
+% Optionally, add a predicate to indicate what they sell
+sells(5, "ice cream").
+sells(6, "ice cream").
+sells(7, "ice cream").
+
+% Make company 1 control company 4 (assuming control means 50%+ ownership)
+owns(1, 4, 51.0).
+----
+
+Good, now that's some interesting data. To make it a bit more interesting, we can add some more info to existing companies, in-place:
+
+> `@vadacoder /write` we forgot to add activity sector to "company"!
+
+[source,datalogpm]
+----
+% Add activity sector as the fourth argument: company(ID, Name, Address, Sector)
+company(1, "Acme Corp", "123 Main St", "Manufacturing").
+company(2, "Beta Ltd", "456 Oak Ave", "Consulting").
+company(3, "Gamma Inc", "789 Pine Rd", "Technology").
+company(4, "Delta LLC", "321 Maple Blvd", "Logistics").
+company(5, "Gelato Roma", "Via Veneto 10, Rome, Italy", "Ice Cream").
+company(6, "Dolce Vita Gelateria", "Corso Italia 22, Milan, Italy", "Ice Cream").
+company(7, "Fresco Gelato", "Piazza San Marco 5, Venice, Italy", "Ice Cream").
+----
+
+Now it's the time to write some logic:
+
+> `@vadacoder /write` Well, now get me competitors. Two companies are competitors if they are in the same field of activity.
+
+[source,datalogpm]
+----
+% Two companies are competitors if they are in the same sector and have different IDs
+competitor(X, Y) :- company(X, _, _, S), company(Y, _, _, S), X <> Y.
+
+@output("competitor").
+----
+
+### `/manual` command
+
+Vadacoder is quite an expert in Datalog+/-! 
+
+Using the `/manual` command, you can ask it to explain Datalog+/- concepts, or to answer questions about the language. Let's try it out:
+
+[.excerpt]
+____
+`@vadacoder /manual` What is Datalog+/-'s reference fragment?
+
+`@vadacoder /manual` Can I use aggregation in recursion?
+
+`@vadacoder /manual` Explain to me how to use msum
+
+`@vadacoder /manual` What available operators?
+____
+
+.Asking questions about Datalog+/- to Vadacoder
+image::copilot-manual.png[]
+
+
+## Custom instructions and prompts
+
+Vadacode ships with a set of pre-configured Copilot instructions and prompts that support logic programming in Datalog+/-.
+
+These assets are not installed automatically because they need to be **configured per-workspace**. You can install such instructions in your workspace by running the command **Add Copilot Instructions & Prompts** from the Command Palette (kbd:[⌘+Shift+P] on macOS or kbd:[Ctrl+Shift+P] on Windows/Linux). This command copies the necessary files in your workspace (`.vadacode` directory). Scaffolded instructions are included in scaffolded `.gitignore` files.
+
+.Scaffolded Copilot assets in the workspace
+----
+📒 .vadacode <.>
+  📂 instructions
+		📄 vada-explain.instructions.md <.>
+		📄 vada.instructions.md <.>
+		📄 vadanb-explain.instructions.md
+		📄 vadanb.instructions.md
+  📂 prompts
+		📄 vadoc.prompt.md <.>
+📒 .vscode <.>
+		📄 settings.json <.>
+----
+<.> GitHub workspace configuration folder
+<.> instructions for explaining Datalog +/- code (replicated for programs `.vada` files and notebooks `.vadanb` files)
+<.> instructions for Datalog +/- syntax and semantics in programs (replicated for programs `.vada` files and notebooks `.vadanb` files)
+<.> prompts for writing Vadoc code documentation
+<.> VSCode workspace settings
+<.> custom settings to enable Copilot custom instructions in Vadacode files
+
+Custom instructions and prompts are activated only if you have the GitHub Copilot extension installed and enabled in your workspace, and can be included or not depending on chat context. For example, if you ask to explain a rule in a `.vada` program, Copilot uses the custom instructions automatically. If you ask a general question about Datalog+/-, Copilot may not use such instructions unless you explicitly tell it to do so.
+
+You can even explicitly tell Copilot to consider instructions using the **Add Context...** command (the paperclip icon in the chat input box) and passing in the generated files.
+
+IMPORTANT: To be sure that Copilot is answering using Vadacode instructions, always verify which references are fetched during the response.
+
+.Copilot used Vadacode references to answer our question.
+image::copilot-references.png[alt="When Copilot uses a reference, it shows such reference in the answer's payload."]
+
+
+### Custom instructions
+
+Vadacode ships with a set of custom instructions to further improve the responses of queries involving programming in Datalog+/-. 
+Instead of manually including this context in every chat query, custom instructions automatically incorporate this information with every chat request.
+
+NOTE: Custom instructions are not taken into account for code completions (by design of VSCode Copilot integration).
+
+Vadacode supports custom instructions for editing code in Datalog+/- language both in `.vada` and `.vadanb` files.
+
+### Custom prompts
+
+Vadacode defines reusable prompts for common tasks; these prompts are stored in files are standalone prompts that you can run directly in chat. They describe the task to be performed (what should be done). Optionally, you can include tasks-specific guidelines about how the task should be performed, or you can reference custom instructions in the prompt file. Learn how to create prompt files.
+
+#### `/vadoc` prompt
+
+Vadacode ships with a handy `/vadoc` prompt that helps you write documentation for predicate atoms and keep your code understandable. This prompt is available in the `.vadacode/prompts` folder, and you can run it by typing `/vadoc` in the chat.
+
+To document a predicate, open **Editor Inline Chat** (kbd:[⌘+I] on macOS or kbd:[Ctrl+I] on Windows/Linux) and just type `/vadoc` in the chat.
+
+.Vadoc prompt in Editor Inline Chat
+image::copilot-vadoc-prompt.png[]
+
+Copilot will then readily write the documentation for you, based on the predicate atom you are editing. You can then edit the documentation to your liking.
+
+[source,datalogpm]
+----
+%% Aggregates the total percentage of shares that an `owner` controls over an `owned` company,
+%% considering all possible intermediate entities.
+%% @term {string} Owner Id of owner entity.
+%% @term {string} Owned Id of owned entity.
+%% @term {number} Percentage Total percentage of shares controlled by the owner.
+total_controlled_shares(X,Y,J) :- controlled_shares(X,_,Y,P), J=msum(P).
+----

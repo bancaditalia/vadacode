@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es2020",
+    "lib": ["es2020", "dom"],
+    "rootDir": "src",
+    "sourceMap": true,
+    "outDir": "out",
+    "declarationDir": "out",
+    "declaration": true,
+    "moduleResolution": "node"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", ".vscode-test"]
+}

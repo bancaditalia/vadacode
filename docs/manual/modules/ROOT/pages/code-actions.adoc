@@ -1,0 +1,24 @@
+# Code actions
+:experimental:
+
+In VS Code, Code Actions can provide both refactorings and Quick Fixes for xref:diagnostics.adoc[detected issues] (highlighted with yellow/red squiggles). When the cursor is on a squiggle or on a selected text region, VS Code shows a light bulb icon in the editor to indicate that a Code Action is available. If you select the Code Action light bulb or use the menu:Quick Fix[] command kbd:[⌘,.]/kbd:[ctrl,.], the Quick Fixes and refactorings control is presented.
+
+If you prefer to only see refactorings without Quick Fixes, then you can use the menu:Refactor[] command (kbd:[⌃,⇧,R]).
+
+Additionally, menu:Code Action Widget: Include Nearby Quick Fixes[] (`editor.codeActionWidget.includeNearbyQuickFixes`) is a setting that is enabled on default, which will activate the nearest Quick Fix in a line from kbd:[⌘,.]/kbd:[ctrl,.] (command ID `editor.action.quickFix`), no matter where your cursor is in that line.
+
+The command highlights the source code that will be refactored or fixed with Quick Fixes. Normal Code Actions and non-fix refactorings can still be activated at the cursor location.
+
+NOTE: You can completely disable Code Action lightbulbs in the editor with the editor.lightbulb.enable https://code.visualstudio.com/docs/getstarted/settings[setting]. You can still open Quick Fixes through menu:Quick Fix[] command and kbd:kbd:[⌘,.]/kbd:[ctrl,.]. keyboard shortcut.
+
+## Quick fixes
+
+Vadacode supports the following quick fixes.
+
+### Quick fix: Add an `@exports` tag to unused atoms
+
+When an atom is unused, it may be declared because it's used in a program including the current one as a module. For this reason, Vadacode provides a functionality to automatically add xref:vadoc.adoc#_exports[@exports] tag to suppress the warning.
+
+### Quick fix: Remove a rule generating an unused atom
+
+When an atom is unused, its rule may be a leftover; Vadacode provides a functionality to remove completely the rule.

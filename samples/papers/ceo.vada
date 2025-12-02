@@ -1,0 +1,17 @@
+% Reasoning in Warded Datalog+/- with Harmful Joins
+% https://ceur-ws.org/Vol-3194/paper35.pdf
+
+% Company(x) → ∃c CEO(x,c).
+% Merges(x,y),CEO(x,c) → CEO(y,c).
+% Corp(x,y) → ∃c CEO(x,c),CEO(y,c) 
+% CEO(x,c),CEO(y,c) → Corp(x,y)
+
+@input("company").
+@input("merges").
+
+ceo(X, C) :- company(X).
+ceo(Y, C) :- merges(X, Y), ceo(X, C).
+ceo(X, C), ceo(Y, C) :- corp(X, Y).
+corp(X, Y) :- ceo(X, C), ceo(Y, C).
+
+@output("ceo").

@@ -1,0 +1,5 @@
+% Datalog E
+e("a").
+i1(X,Y,S) :- e(X).
+i2(S,Y,K) :- i1(X,Y,S), i1(Z,Y,K).
+@output("i2").

@@ -1,0 +1,56 @@
+# Datalog+/- notebooks
+:experimental:
+
+Notebooks are great storytelling devices, allowing you to interleave Markdown elements like images, math equations, and explanatory text with your code and its execution results. Notebooks can be a perfect way to share and explain your ideas.
+
+They make also great REPLs (https://en.wikipedia.org/wiki/Read%e2%80%93eval%e2%80%93print_loop[read-eval-print] loop), interactive applications where you can write a few lines of code and execute the code immediately and see the output, keeping the results along the way.
+
+**Vadacode supports Datalog+/- notebooks**, which allow for the interactive use of Datalog+/-.
+
+NOTE: Datalog+/- notebook experience may be different from what you may expect from a language like Python. In particular, in Datalog+/- Notebooks **the execution of each cell is independent** from the others (no volatile results are persisted between executions). For example, if you assign an atom in a cell, it does not become available in other cells. Nevertheless, you can do sequential processing by explictly persisting data using `@input`, `@output` and `@bind` statements.
+
+## Create or open a Datalog+/- Notebook
+
+You can create a Datalog+/- Notebook by running the **Vadacode: Create notebook** command from the Command Palette (kbd:[⌘+Shift+P] on macOS or kbd:[Ctrl+Shift+P] on Windows/Linux) or by creating a new `.vadanb` file in your workspace.
+
+.Vadacode-created stub Datalog+/- notebook
+image::notebook-create.png[]
+
+If you have an existing Datalog+/- Notebook, you can open it by right-clicking on the file and opening with VS Code, or through the VS Code File Explorer.
+
+## Running cells
+
+NOTE: Vadacode notebooks send requests to the endpoint specified in the `Reasoner endpoint` xref:settings.adoc#_reasoner_endpoint[setting].
+
+### Run a single code cell
+
+Once your code is added, you can run a cell using the Run icon to the left of the cell and the output will be displayed below the code cell.
+
+.Execution of a notebook cell
+image::notebook-run.png[]
+
+To run a selected code cell, you can also use keyboard shortcuts in both command and edit mode. kbd:[Ctrl+Enter] runs the currently selected cell. kbd:[Shift+Enter] runs the currently selected cell and inserts a new cell immediately below (focus moves to new cell). kbd:[Alt+Enter] runs the currently selected cell and inserts a new cell immediately below (focus remains on current cell).
+
+### Run multiple code cells
+
+Running multiple code cells can be accomplished in many ways. You can use the double arrow in the main toolbar of the Notebook Editor to run all cells within the Notebook or by selecting **Run All Above** or **Run All Below** buttons of the current code cell.
+
+.Execution of all notebook cells
+image::notebook-run-all.png[]
+
+### Save your Datalog+/- Notebook
+
+You can save your Datalog+/- Notebook using the keyboard shortcut kbd:[Ctrl+S] or menu:File[Save].
+
+## IntelliSense support in the Datalog+/- Notebook Editor
+
+The Datalog+/- Notebook Editor window has full IntelliSense - code completions, member lists, quick info for methods, and parameter hints. You can be just as productive typing in the Notebook Editor window as you are in the code editor.
+
+.Notebook integration with Visual Studio Code Intellisense
+image::notebook-intellisense.png[]
+
+
+## Further information
+
+Further information about Visual Studio Code notebooks and a full usage guide can be found at https://code.visualstudio.com/docs/datascience/jupyter-notebooks#_run-multiple-code-cells[Jupyter Notebooks in VS Code].
+

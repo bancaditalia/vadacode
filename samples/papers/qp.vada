@@ -1,0 +1,19 @@
+% The Vadalog System: Datalog-based Reasoning for Knowledge Graphs
+% https://arxiv.org/pdf/1807.08709
+
+% In the above set of rules, variable z in Q is existentially quantified in 
+% the first rule. This implies that the first position of Q can bind to null 
+% values (denoted by the "hat" symbol), for example in the second rule, where x, 
+% also appears in the head. Thus x is dangerous.
+% However, since in the second rule it appears only as a term of the predicate Q 
+% the ward (overlined). Also observe that Q shares y, a harmful variable, with P.
+
+% q(Z^, X) :- P(X).
+% T(X^) :- Q‾(X^, Y), P(Y).
+
+@input("p").
+
+q(Z, X) :- p(X).
+t(X) :- q(X, Y), p(Y).
+
+@output("t").

@@ -1,0 +1,149 @@
+{
+  "scopeName": "source.datalogpm",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#annotations" },
+    { "include": "#variables" },
+    { "include": "#predicates" },
+    { "include": "#operators" },
+    { "include": "#constants" },
+    { "include": "#punctuation" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.documentation",
+          "begin": "(%%\\s)",
+          "beginCaptures": { "1": { "name": "punctuation.definition.comment" } },
+          "end": "$",
+          "endCaptures": { "1": { "name": "punctuation.definition.comment" } }
+        },
+        {
+          "name": "comment.block",
+          "begin": "(%\\*)",
+          "beginCaptures": { "1": { "name": "punctuation.definition.comment" } },
+          "end": "(\\*%)",
+          "endCaptures": { "1": { "name": "punctuation.definition.comment" } }
+        },
+        {
+          "name": "comment.line",
+          "begin": "(%)",
+          "beginCaptures": { "1": { "name": "punctuation.definition.comment" } },
+          "end": "(?=$)"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.datalogpm",
+          "begin": "\"",
+          "beginCaptures": { "0": { "name": "punctuation.definition.string.begin" } },
+          "end": "\"",
+          "endCaptures": { "0": { "name": "punctuation.definition.string.end" } },
+          "patterns": [
+            { "name": "constant.character.escape.datalogpm", "match": "\\\\." }
+          ]
+        }
+      ]
+    },
+    "annotations": {
+      "patterns": [
+        {
+          "name": "meta.annotation.datalogpm",
+          "match": "(@)([A-Za-z][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "punctuation.definition.annotation.datalogpm" },
+            "2": { "name": "keyword.other.annotation.datalogpm" }
+          }
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.other.anonymous.datalogpm",
+          "match": "\\b_\\b"
+        },
+        {
+          "name": "variable.other.datalogpm",
+          "match": "(?<![A-Za-z0-9_])_?[A-Z][A-Za-z0-9_]*\\b"
+        }
+      ]
+    },
+    "predicates": {
+      "patterns": [
+        {
+          "name": "entity.name.function.datalogpm",
+          "match": "(?<![A-Za-z0-9_])([a-z][A-Za-z0-9_]*)(?=\\s*\\()"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.datalogpm",
+          "match": "(?::-|==|!=|<>|<=|>=|&&|\\|\\||=|<|>|\\+|-|\\*|/|\\|\\b)"
+        },
+        {
+          "name": "keyword.operator.logical.datalogpm",
+          "match": "\\b(?:and|or|not)\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.numeric.datalogpm",
+          "match": "(?<![A-Za-z0-9_])-?\\d+(?:\\.\\d+)?(?:[Ee]-?\\d+)?f?(?![A-Za-z0-9_])"
+        },
+        {
+          "name": "constant.other.date.datalogpm",
+          "match": "\\b\\d{4}-\\d{2}-\\d{2}(?:\\s+\\d{2}:\\d{2}:\\d{2})?\\b"
+        },
+        {
+          "name": "constant.language.boolean.datalogpm",
+          "match": "(?<![A-Za-z0-9_])#(?:T|F)\\b"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.separator.datalogpm",
+          "match": ","
+        },
+        {
+          "name": "punctuation.section.parens.begin.datalogpm",
+          "match": "\\("
+        },
+        {
+          "name": "punctuation.section.parens.end.datalogpm",
+          "match": "\\)"
+        },
+        {
+          "name": "punctuation.section.braces.begin.datalogpm",
+          "match": "\\{"
+        },
+        {
+          "name": "punctuation.section.braces.end.datalogpm",
+          "match": "\\}"
+        },
+        {
+          "name": "punctuation.section.brackets.begin.datalogpm",
+          "match": "\\["
+        },
+        {
+          "name": "punctuation.section.brackets.end.datalogpm",
+          "match": "\\]"
+        },
+        {
+          "name": "punctuation.terminator.datalogpm",
+          "match": "\\.(?=\\s*(?:%|$))"
+        }
+      ]
+    }
+  }
+}

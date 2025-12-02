@@ -1,0 +1,10 @@
+@input("company").
+@input("control").
+
+% The first rule expresses that for every company x there exists a key person p.
+keyPerson(P, X) :- company(X).
+% Then, if company x controls company y and p is a key person for x, then p will 
+% be a key person for y as well.
+keyPerson(P, Y) :- control(X, Y), keyPerson(P, X).
+
+@output("keyPerson").

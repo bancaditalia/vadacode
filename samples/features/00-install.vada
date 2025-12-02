@@ -1,0 +1,20 @@
+% Hello world, this is your first Datalog+/- program.
+
+% This actually does nothing, but if these lines are not 
+% shown as comments, you don't have Vadacode!
+
+% TUTORIAL: Download Vadacode
+
+% FIXME: Install Vadacode!
+
+% TUTORIAL: You can have colored comments using magic keywords like FIXME or BUG.
+%       Check the documentation for more features!
+%       https://www.vadalog.org/
+
+% NOTE: in the next demos, you will find marked TODOs to discover things
+%       that you can do in Vadacode. Obviously, refer to the documentation
+%       for the complete (and growing) list of features.
+
+% COMMENT: Things will definitely become more interesting than this "program"!
+%          More specifically, each demo shows some features of Datalog+/- and
+%          some features of Vadacode. Stay Awhile and Listen!

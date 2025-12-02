@@ -1,0 +1,142 @@
+name: Test VSIX (manual)
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  actions: read   # needed for gh to list & download workflow runs
+
+jobs:
+  test-vsix:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 1) Get latest successful "Build Vadacode" run ID
+      - name: Get latest successful Build Vadacode run
+        id: get_run
+        run: |
+          # List recent runs of the "Build Vadacode" workflow on master
+          RUN_ID=$(
+            gh run list \
+              --workflow "Build Vadacode" \
+              --branch master \
+              --limit 50 \
+              --json databaseId,conclusion,createdAt \
+              --jq 'map(select(.conclusion=="success")) | sort_by(.createdAt) | reverse | .[0].databaseId'
+          )
+
+          if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
+            echo "No successful Build Vadacode run found on branch 'master'"
+            exit 1
+          fi
+
+          echo "Found successful Build Vadacode run id: $RUN_ID"
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2) Download the vadacode-build artifact from that run
+      - name: Download Vadacode build artifacts
+        run: |
+          gh run download "${{ steps.get_run.outputs.run_id }}" \
+            --name vadacode-build \
+            --dir build
+          echo "Downloaded artifact contents:"
+          ls -R build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2) Download the vadacode-build artifact from that run
+      - name: Download Vadacode build artifacts
+        run: |
+          gh run download "${{ steps.get_run.outputs.run_id }}" \
+            --name vadacode-out \
+            --dir out
+          echo "Downloaded artifact contents:"
+          ls -R out
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 3) Your original test-vsix steps
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install npm dependencies
+        run: npm install
+
+#      - name: Build everything
+#        run: npx tsc -b ./tsconfig.json
+
+      - name: Configure environment
+        run: npm run ui-get && npm run ui-install && npm run ui-chromedriver
+
+      - name: Execute client tests (smoke)
+        run: xvfb-run -a npm run smoke-tests
+
+  release:
+    # Only run after successful build on main
+    needs: test-vsix
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 1) Get latest successful "Build Vadacode" run ID
+      - name: Get latest successful Build Vadacode run
+        id: get_run
+        run: |
+          # List recent runs of the "Build Vadacode" workflow on master
+          RUN_ID=$(
+            gh run list \
+              --workflow "Build Vadacode" \
+              --branch master \
+              --limit 50 \
+              --json databaseId,conclusion,createdAt \
+              --jq 'map(select(.conclusion=="success")) | sort_by(.createdAt) | reverse | .[0].databaseId'
+          )
+
+          if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
+            echo "No successful Build Vadacode run found on branch 'master'"
+            exit 1
+          fi
+
+          echo "Found successful Build Vadacode run id: $RUN_ID"
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2) Download the vadacode-build artifact from that run
+      - name: Download Vadacode build artifacts
+        run: |
+          gh run download "${{ steps.get_run.outputs.run_id }}" \
+            --name vadacode-build \
+            --dir build
+          echo "Downloaded artifact contents:"
+          ls -R build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Read version from file
+        id: version
+        run: |
+          VERSION=$(cat version)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          # Tag will be created if it doesn't exist
+          tag_name: v${{ env.VERSION }}
+          name: v${{ env.VERSION }}
+          files: build/*
+          target_commitish: ${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

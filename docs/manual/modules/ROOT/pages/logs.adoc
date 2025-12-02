@@ -1,0 +1,12 @@
+# Live logs
+:experimental:
+
+Vadacode offers support for live logs, which is particularly useful for debugging and monitoring the reasoner in real-time (if logging to a file).
+
+## Enable live logs
+
+Live logs are visualized as streaming text in a dedicated VS Code Output panel named **Vadacode Application Log**. Although no assumptions are made about the log format, Vadacode supports logs formatted in Elastic Common Schema (ECS), which are syntax highlighted to clearly show warnings, errors, and other log levels.
+
+You can freely configure the log file to watch, which has its own entry in xref:settings.adoc[]. 
+
+Vadacode will automatically refresh the log file in the Output panel when you run a reasoning task. In case the file watcher doesn't follow the file, Vadacode supports a handy automatic refresh which triggers regularly according to the **Vadacode Log Interval** setting.

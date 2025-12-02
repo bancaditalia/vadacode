@@ -1,0 +1,16 @@
+# Walkthroughs
+:experimental:
+
+Vadacode provide some walkthroughs, which provide step-by-step instructions for onboarding users to its features via a multi-step checklist.
+
+To access Vadacode walkthroughs, open the *Command Palette* (kbd:[Shift+ctrl+P]/kbd:[Shift+⌘+P]) and select the **Welcome: Open Walkthrough...** command.
+
+image::walkthrough.png[]
+
+## Get started with Datalog+/- Development
+
+This walkthrough guides you in the creation of your first Datalog+/- program and its execution.
+
+## Get started with Datalog+/- Notebooks
+
+This walkthrough guides you in the creation of your first Datalog+/- notebook and the execution of its cells.

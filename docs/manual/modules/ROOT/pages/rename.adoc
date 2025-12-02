@@ -1,0 +1,36 @@
+# Renaming symbols
+:experimental:
+
+Renaming is a common operation related to refactoring source code, and Vadacode supports the renaming of atoms and variables.
+
+## Atoms
+
+Vadacode supports the renaming of atoms.
+
+TIP: Atom renaming uses symbol references. This means that if you rename an atom `a`, annotation rules like `@output("a")` or `@mapping("a")` will be affected as well.
+
+To rename an atom:
+
+* press kbd:[F2] or select menu:Context menu[Rename symbol];
+* type the new desired name;
+* press kbd:[Enter].
+
+All instances of the atom will be renamed.
+
+image::rename-atom.png[]
+
+## Variables
+
+Vadacode supports the renaming of variables.
+
+TIP: Variable renaming uses symbol references. This means that if you rename a variable `x`, all variables in the rule will be affected, but not those in other rules (as, in Datalog, variables are rule-scoped).
+
+To rename a variable:
+
+* press kbd:[F2] or select menu:Context menu[Rename symbol];
+* type the new desired name;
+* press kbd:[Enter].
+
+All instances of the variable will be renamed.
+
+image::rename-variable.png[]

@@ -1,0 +1,39 @@
+* xref:vadacode-manual:ROOT:CHANGELOG.adoc[Release notes]
+
+* xref:vadacode-manual:ROOT:get-started.adoc[]
+* xref:vadacode-manual:ROOT:settings.adoc[]
+* xref:vadacode-manual:ROOT:walkthroughs.adoc[]
+* xref:vadacode-manual:ROOT:copilot.adoc[]
+
+.Code analysis
+* xref:vadacode-manual:ROOT:semantic-highlighting.adoc[]
+* xref:vadacode-manual:ROOT:diagnostics.adoc[]
+* xref:vadacode-manual:ROOT:comments.adoc[]
+* xref:vadacode-manual:ROOT:vadoc.adoc[]
+
+.Code navigation
+
+* xref:vadacode-manual:ROOT:definitions.adoc[]
+* xref:vadacode-manual:ROOT:references.adoc[]
+* xref:vadacode-manual:ROOT:code-completion.adoc[]
+* xref:vadacode-manual:ROOT:symbols.adoc[]
+* xref:vadacode-manual:ROOT:signatures.adoc[]
+
+.Actions
+
+* xref:vadacode-manual:ROOT:code-actions.adoc[]
+* xref:vadacode-manual:ROOT:rename.adoc[]
+* xref:vadacode-manual:ROOT:schema-inference.adoc[]
+* xref:vadacode-manual:ROOT:binding-actions.adoc[]
+
+.Language analysis
+* xref:vadacode-manual:ROOT:fragment.adoc[]
+
+.Running
+* xref:vadacode-manual:ROOT:execution.adoc[]
+* xref:vadacode-manual:ROOT:notebooks.adoc[]
+* xref:vadacode-manual:ROOT:logs.adoc[]
+
+.Extension development
+* xref:vadacode-manual:ROOT:architecture.adoc[]
+* xref:vadacode-manual:ROOT:development.adoc[]

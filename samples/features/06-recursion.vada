@@ -1,0 +1,62 @@
+% Cycles and recursion
+
+% A program is recursive if it involves a cycle in the dependencies of the atoms.
+% Recursion is particularly powerful as it allows for inference based on previously
+% inferred results.
+% Recursion can be used for example when there you want to traverse a graph
+% or a hierarchy in depth.
+
+% Company structures are typically nested at various levels.
+officeOf("ges", "it").
+officeOf("ced", "ges").
+officeOf("svi", "it").
+officeOf("pia", "it").
+officeOf("drta", "pia").
+officeOf("seg", "pia").
+officeOf("das", "svi").
+officeOf("dapa", "svi").
+
+% 1. Part-of relationship with recursion
+
+% We define an intentional part-of relationship copying the extensional data which 
+% only shows direct parts.
+partOf(X, Y) :- officeOf(X, Y).
+
+% The part-of relationship is naturally transitive and hence we can define it as such.
+% To be sure that we traverse all levels at any depth in the graph we use recursion
+% so that al paths are explored.
+partOf(X, Z) :- partOf(X, Y), partOf(Y, Z).
+
+% "partOf" gives us which elements are part of others (directly or indirectly).
+@output("partOf").
+@post("partOf", "orderby(2)").
+
+% TUTORIAL: Run the program.
+%       Note the containment and the post annotation that orders result by position.
+
+% 2. Partonomy navigation
+
+% This nested representation of offices is called a partonomy (part-whole relations).
+% In such systems you might be interested in finding the top and bottom elements.
+
+% Divisions are bottom elements
+% divisions(X) :- partOf(X, _), not partOf(_, X).
+% @output("divisions").
+
+% departments(Z) :- partOf(_, Z), not partOf(Z, _).
+% @output("departments").
+
+% 3. Cyclicity detection
+
+% As partonomy relations are by definition acyclic, it's useful to have 
+% a simple way to check if the graph has unwanted cycles. We observe that if
+% there is a cycle, we would have that A would be part of B, and B of A,
+% so A can reach A and B can reach B: hence, cyclicity manifests itself
+% by the presence of self-loops (something is derived to be a part of itself).
+% cyclicPart(X) :- partOf(X, X).
+% @output("cyclicPart").
+
+% NOTE: When an empty output is returned to the console, no table for that atom appears.
+
+% TUTORIAL: Add an error to our database and run again cyclic detection.
+% officeOf("it", "ced").

@@ -1,0 +1,38 @@
+% Data annotations
+% Annotations are special facts that allow to inject specific
+% behaviors into Datalog+/- programs. There are several annotations.
+% Here we show the most common ones.
+% For more information:
+% https://vadalog.org/vadalog-handbook/latest/annotations.html
+
+% 1. Input data as facts.
+addresses_db("hq", "Via Nazionale", 91, "00184", "Roma").
+addresses_db("cdm", "Largo Guido Carli", 1, "00044", "Roma").
+
+
+
+% TUTORIAL: Vadacode supports automatic completion; type an "a" 
+%       and you will see rules starting with "a" come up.
+%       Choose one and hit enter.
+
+% Output data directly (to console log or notebook cell)
+addresses(Toponym, StreetNumber, Cap, City) :- addresses_db(Id, Toponym, StreetNumber, Cap, City).
+@output("addresses").
+
+% TUTORIAL: Automatic completion is supported as well for annonotations.
+%       Type an @ to see the list of supported annotation symbols.
+
+
+% 2. Input data from source.
+@input("someInputData").
+% Several data sources are supported!
+@bind("someInputData", "csv useHeaders=true", "/samples", "input.csv").
+
+% TUTORIAL: Vadacode has the concept of "signatures", which are basically the definition of 
+%       positions in an atom, just like function parameters for imperative languages.
+%       For annotations, this comes particularly useful as it
+%       documents how Datalog+/- expects their parameters. Hover on @bind to show more.
+
+% Output data to a sink.
+@bind("addresses", "csv", "/samples", "output.csv").
+

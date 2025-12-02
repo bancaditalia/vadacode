@@ -1,0 +1,64 @@
+% Equality Generating Dependencies (part 2)
+
+% Let's add the needed extensional data we need.
+
+% That's what we know of the world ----------------------------------
+owns("white", "yellow", 0.8).
+owns("yellow", "cyan", 0.9).
+% Let's add a new company with minor involvement.
+owns("white", "red", 0.1).
+
+hasAPositionAt("sunglasses", "cyan", "CEO").
+hasAPositionAt("woman", "blue", "CEO").
+
+% That's how the world works ----------------------------------------
+
+@input("memberOf").
+@bind("memberOf", "csv useHeaders=true", "./data/", "member-of.csv").
+@mapping("memberOf", 0, "Person", "string").
+@mapping("memberOf", 1, "Family", "string").
+
+% 1. Link companies by people role
+
+% CEO is a relevant position.
+relevantPosition(P, C) :- hasAPositionAt(P, C, R), R="CEO".
+
+% If two persons are member of the same family and they have relevant positions in some companies,
+% the companies are closely related.
+closelyRelated(C1, C2) :- relevantPosition(P1, C1), relevantPosition(P2, C2), memberOf(P1, F), memberOf(P2, F), C1<>C2.
+
+% TUTORIAL: Vadacode supports References, therefore it can show where you use atoms, 
+%       which may prove very useful in bigger programs. References are shown 
+%       as separate view, just like search results. To show references to an
+%       atom, you can right-click it and select "Find all references".
+%       Do it for hasAPositionAt atom.
+
+% 2. Link companies by control
+
+% A company controls another if it owns more than 50% (it's just an example).
+% controls(X, Y) :- owns(X, Y, W), W > 0.5.
+% If a company controls another, the two companies are closely related.
+% closelyRelated(X, Y) :- controls(X, Y).
+
+% TUTORIAL: Vadacode supports Definitions, therefore you always have a handy
+%       Outline that shows every atom used in the program and its terms.
+%       To access the outline, go to Explorer (Ctrl+Shift+B) and open the
+%       Outline panel.
+%       You can even click atoms and terms to quickly reach the relevant
+%       portions of code.
+%       Do it for owns atom.
+
+% 3. closelyRelated relationship is transitive.
+% closelyRelated(X, Z) :- closelyRelated(X, Y), closelyRelated(Y, Z), X<>Y, Y<>Z, X<>Z.
+
+% TUTORIAL: Vadacode has the concept of "signatures", which are basically the definition of 
+%       positions in an atom, just like function parameters for imperative languages.
+%       Hover on closelyRelated rule to see its signature.
+
+% NOTE: For intensional atoms, variables can appear with any name in different rules.
+%       In this demo, we purposefully change variable names each time.
+%       Vadacode uses the convention that, when necessary (e.g. in error 
+%       messages), atom signatures are built upon the first appearance of the atom
+%       in the program.
+@output("closelyRelated").
+@post("closelyRelated", "orderby(1)").

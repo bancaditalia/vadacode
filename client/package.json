@@ -1,0 +1,35 @@
+{
+  "name": "vadacode-client",
+  "description": "VSCode client for Vadacode LSP server",
+  "author": "Banca d'Italia",
+  "license": "SSPL-1.0",
+  "private": true,
+  "publisher": "bancaditalia",
+  "version": "1.8.4",
+  "engines": {
+    "vscode": "^1.98.0"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "glob": "^11.0.0",
+    "hyparquet": "^1.17.2",
+    "papaparse": "^5.5.3",
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/vscode": "^1.98.0",
+    "@vscode/test-electron": "^2.4.1",
+    "rollup": "^3.29.5"
+  },
+  "scripts": {
+    "compile": "tsc",
+    "build": "rollup -c --bundleConfigAsCjs",
+    "watch": "rollup -c --bundleConfigAsCjs -w"
+  }
+}

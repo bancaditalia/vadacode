@@ -1,0 +1,6 @@
+% Linear
+human("andrea").
+person(X) :- human(X).
+parent(X,Y) :- person(X).
+person(Y) :- parent(X,Y).
+@output("person").

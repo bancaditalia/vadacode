@@ -1,0 +1,5 @@
+% Frontier Guarded. S and G are the guards.
+s("a", "b").
+g("b", "b").
+t(X,Z) :- s(X,Y), t(Y,K), g(X,K).
+@output("t").
