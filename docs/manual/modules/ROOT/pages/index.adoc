@@ -16,7 +16,7 @@ All code editing features (e.g. diagnostics and fragment detection) are implemen
 
 ## Quick start
 
--   **Step 1.** **Install** VSCode;
+-   **Step 1.** https://github.com/bancaditalia/vadacode/releases[Download Vadacode,window=_blank];
 -   **Step 2.** In VSCode, go to View > Extensions, click on the three-dots (...) button at the top of the tab and click on the **Install from VSIX...** menu. Select the Vadacode `.vsix` file;
 -   **Step 3.** If xref:walkthroughs.adoc[] don't open automatically, you can give them a look using the **Walkthrough: Open Walkthrough...** command;
 -   **Step 4.** Open or create a Datalog+/- file or notebook and start coding!
